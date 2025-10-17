@@ -1,0 +1,10 @@
+# sistema / editor
+.vscode/
+Thumbs.db
+.DS_Store
+
+# node (se tiver)
+node_modules/
+
+# arquivos sensíveis
+.env
