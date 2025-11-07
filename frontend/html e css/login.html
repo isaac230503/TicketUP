@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tela de Login</title>
+
+  <!-- carregar fonte -->
+  <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;500&display=swap" rel="stylesheet">
+
+  <!-- CSS correto (arquivo presente na mesma pasta) -->
+  <link rel="stylesheet" href="login.css">
+</head>
+<body>
+  <div class="login-container">
+    <div class="logo">
+      <!-- caminho para a pasta assets (um nível acima da pasta login) -->
+      <img src="../assets/logo.png" alt="Logo">
+    </div>
+
+    <div class="form">
+      <div class="input-group">
+        <label for="usuario">Usuário</label>
+        <input type="text" id="usuario" placeholder="Digite seu usuário">
+      </div>
+
+      <div class="input-group">
+        <label for="senha">Senha</label>
+        <input type="password" id="senha" placeholder="Digite sua senha">
+      </div>
+
+      <div class="extras">
+        <label><input type="checkbox"> Lembrar minha senha</label>
+        <a href="#">Esqueci minha senha</a>
+      </div>
+
+      <button class="btn-login">Login</button>
+
+      <p class="register">Não possui uma conta? <a href="#">Registre-se</a></p>
+    </div>
+  </div>
+</body>
+</html>

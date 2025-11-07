@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>TicketUP — Central de Ajuda</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="ajuda.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="logo">
+        <a href="../html e css/index.html"><img src="../assets/logo.png" alt="TicketUP logo" /></a>
+      </div>
+
+      <nav class="toplinks" aria-label="menu principal">
+        <a href="../html e css/index.html">Entrar/Cadastrar</a>
+        <a href="#">Enviar uma solicitação</a>
+        <a href="#" class="icon-link" aria-label="instagram"><img src="../assets/instagram.png" alt="Instagram"></a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="help-page">
+    <section class="hero" role="region" aria-label="pesquisa de ajuda">
+      <div class="hero-inner container">
+        <h1>Como podemos te ajudar hoje?</h1>
+
+        <form class="search-form" action="#" onsubmit="return false;">
+          <label for="q" class="sr-only">Pesquisar dúvidas</label>
+          <input id="q" name="q" type="search" placeholder="Escreva sua dúvida aqui..." />
+          <button type="submit" aria-label="Pesquisar">Pesquisar</button>
+        </form>
+      </div>
+    </section>
+
+    <section class="topics container" aria-label="tópicos de ajuda">
+      <article class="topic-card">
+        <div class="icon" aria-hidden="true">👍</div>
+        <h3>EVENTOS MAIS PROCURADOS</h3>
+        <p class="muted">Tardezinha, Na praia, Cena 2k, etc.</p>
+      </article>
+
+      <article class="topic-card">
+        <div class="icon" aria-hidden="true">💳</div>
+        <h3>COMPRAS</h3>
+        <p class="muted">Cupom, ingresso reembolsável e mais</p>
+      </article>
+
+      <article class="topic-card">
+        <div class="icon" aria-hidden="true">📖</div>
+        <h3>EVENTO CANCELADO / REEMBOLSO</h3>
+        <p class="muted">Cancelamento de compra, reembolso e mais...</p>
+      </article>
+
+      <article class="topic-card">
+        <div class="icon" aria-hidden="true">$</div>
+        <h3>PAGAMENTOS</h3>
+        <p class="muted">Dúvidas de pagamento e aprovações</p>
+      </article>
+
+      <article class="topic-card">
+        <div class="icon" aria-hidden="true">🎟️</div>
+        <h3>INGRESSOS</h3>
+        <p class="muted">Localizar, imprimir ou transferir</p>
+      </article>
+
+      <article class="topic-card">
+        <div class="icon" aria-hidden="true">📦</div>
+        <h3>CADASTRO</h3>
+        <p class="muted">Cadastro, senha e login, atualização de dados</p>
+      </article>
+
+      <article class="topic-card wide">
+        <div class="icon" aria-hidden="true">📚</div>
+        <h3>TERMOS DE USO E POLÍTICA DE PRIVACIDADE</h3>
+      </article>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>© 2025 TicketUP — Todos os direitos reservados</p>
+    </div>
+  </footer>
+</body>
+</html>

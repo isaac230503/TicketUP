@@ -1,0 +1,84 @@
+:root{
+  --accent: #B3FF00;
+  --bg1: rgba(0,0,0,0.2);
+  --black: #000;
+  --card-bg: rgba(0,0,0,0.75);
+  --text: #fff;
+  --radius: 8px;
+  font-family: "Exo 2", Arial, sans-serif;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body.register-page{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  background:
+    linear-gradient(237.33deg, var(--bg1) 76.82%, var(--accent) 100%),
+    linear-gradient(235.14deg, var(--accent) 0.6%, var(--bg1) 22.96%),
+    var(--black);
+  color:var(--text);
+}
+
+/* Card */
+.register-card{
+  width:100%;
+  max-width:480px;
+  background:var(--card-bg);
+  border:1px solid rgba(179,255,0,0.08);
+  padding:26px;
+  border-radius:12px;
+  box-shadow: 0 12px 36px rgba(0,0,0,0.6);
+  text-align:left;
+}
+
+/* logo + title */
+.logo{ display:block; margin:0 auto 14px; width:160px; height:auto; }
+.register-card h1{ text-align:center; font-weight:300; margin:6px 0 18px; color:var(--text); }
+
+/* labels & inputs */
+.field-label{ display:block; margin-bottom:6px; color:var(--text); font-size:13px; font-weight:300; }
+.input-box{
+  display:flex; align-items:center; gap:10px;
+  padding:8px 12px; border-radius:8px;
+  border:1px solid rgba(179,255,0,0.12); background:transparent; margin-bottom:12px;
+  height:48px;
+}
+.input-box i{ color:var(--accent); font-size:18px; flex:0 0 auto; }
+.input-box input{
+  flex:1; border:0; outline:none; background:transparent; color:var(--text); font-size:15px;
+}
+
+/* extras (checkbox) */
+.extras{ display:flex; align-items:center; gap:8px; font-size:13px; color:var(--text); margin-bottom:8px; }
+.extras input[type="checkbox"]{
+  width:16px; height:16px; accent-color:var(--accent); -webkit-appearance:checkbox; appearance:checkbox;
+  margin-right:8px;
+}
+.extras label{ display:flex; align-items:center; gap:8px; cursor:pointer; }
+
+/* button */
+.btn-register{
+  width:100%;
+  height:48px;
+  background:var(--accent);
+  color:var(--black);
+  border:0;
+  border-radius:8px;
+  font-weight:500;
+  cursor:pointer;
+  margin-top:6px;
+}
+
+/* signup link */
+.signup{ text-align:center; margin-top:12px; color:var(--accent); }
+.signup a{ color:var(--accent); text-decoration:underline }
+
+/* responsive */
+@media (max-width:420px){
+  .register-card{ padding:18px; max-width:100%; }
+  .logo{ width:140px; margin-bottom:12px; }
+}

@@ -1,0 +1,18 @@
+{
+  "events": [
+    {
+      "id": 1,
+      "title": "QUINTA NO GALO - NONO GERMANO E CONVIDADOS",
+      "date": "2025-11-06T19:00:00",
+      "venue": "SEDE DO GALO DA MADRUGADA - RECIFE-PE",
+      "image": "/assets/image-20.png",
+      "description": "Descrição do evento"
+    }
+  ],
+  "tickets": [
+    { "id": 1, "event_id": 1, "name": "INDIVIDUAL", "price_cents": 5000, "fee_cents": 500, "stock": 100 },
+    { "id": 2, "event_id": 1, "name": "INDIVIDUAL - MEIA", "price_cents": 2500, "fee_cents": 250, "stock": 50 },
+    { "id": 3, "event_id": 1, "name": "MESA (4 PESSOAS)", "price_cents": 25000, "fee_cents": 2500, "stock": 10 }
+  ],
+  "orders": []
+}

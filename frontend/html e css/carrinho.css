@@ -1,0 +1,96 @@
+/* Estilos para Meus Pedidos (baseado no Figma export) */
+:root{
+  --accent:#B3FF00;
+  --black:#000;
+  --muted-border:#808080;
+  --bg:#ffffff;
+  --panel-bg: rgba(174,174,174,0.12);
+  font-family: "Exo 2", system-ui, Arial, sans-serif;
+}
+
+/* reset */
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:var(--bg);color:#000}
+
+/* topbar */
+.topbar{background:#000;color:#fff;position:sticky;top:0;z-index:40}
+.topbar-inner{max-width:1280px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:12px 20px}
+.logo img{height:48px;display:block}
+.toplinks{display:flex;gap:20px;align-items:center}
+.toplinks a{color:#fff;text-decoration:none;font-weight:300}
+.icon-small{height:20px; width:auto;}
+
+/* layout */
+.page{display:flex;max-width:1280px;margin:28px auto;padding:0 20px;gap:28px}
+
+/* sidebar */
+.sidebar{width:220px}
+.menu-title{font-size:18px;margin-bottom:18px;font-weight:500;color:#000}
+.menu{list-style:none;display:flex;flex-direction:column;gap:18px}
+.menu li{font-size:20px;cursor:pointer}
+.menu li.active{font-weight:600}
+
+/* content */
+.content{flex:1}
+.page-title{font-size:24px;margin-bottom:18px;font-weight:600}
+
+/* orders frame (approx Frame 45) */
+.orders-frame{
+  background: #fff;
+  border:1px solid var(--muted-border);
+  border-radius:8px;
+  padding:12px;
+  overflow:hidden;
+}
+
+/* header row */
+.orders-header{
+  display:grid;
+  grid-template-columns: 120px 100px 1fr 140px 120px 100px 90px;
+  gap:8px;
+  align-items:center;
+  padding:10px 6px;
+  font-size:11px;
+  color:#000;
+  border-bottom:1px solid var(--muted-border);
+}
+
+/* orders list */
+.orders-list{display:flex;flex-direction:column}
+.order-row{
+  display:grid;
+  grid-template-columns: 120px 100px 1fr 140px 120px 100px 90px;
+  gap:8px;
+  align-items:center;
+  padding:14px 6px;
+  border-bottom:1px solid rgba(0,0,0,0.06);
+}
+.order-row:nth-child(odd){background: rgba(0,0,0,0.01)}
+
+/* columns */
+.col{font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.col.event{font-weight:500}
+.col.trans{color:#333}
+.col.total{font-weight:600}
+.col.actions{text-align:center}
+
+/* status */
+.status{padding:6px 8px;border-radius:6px;font-size:13px;text-align:center}
+.status.ok{background:rgba(179,255,0,0.12);color:#000;border:1px solid rgba(179,255,0,0.22)}
+.status.pending{background:rgba(255,195,0,0.08);color:#6a4800;border:1px solid rgba(255,195,0,0.12)}
+
+/* buttons */
+.btn{background:var(--accent);border:none;padding:10px 14px;border-radius:6px;cursor:pointer}
+.btn.small{padding:6px 8px;font-size:13px}
+
+/* responsive */
+@media (max-width:1100px){
+  .page{padding:0 12px}
+  .sidebar{display:none}
+  .orders-header, .order-row{grid-template-columns: 100px 1fr 100px 90px; grid-auto-flow:row}
+  .orders-header .event, .order-row .event{grid-column:2;white-space:normal}
+  .orders-header .trans, .order-row .trans{display:none}
+}
+
+/* garante linhas semelhantes ao Figma (linhas horizontais) */
+.orders-frame::after{content:"";display:block;height:1px;background:transparent;margin-top:8px}
