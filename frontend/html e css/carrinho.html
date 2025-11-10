@@ -4,79 +4,51 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>TicketUP — Meus Pedidos</title>
-
-  <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@200;300;400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="carrinho.css">
+  <link rel="stylesheet" href="index.css">
+  <style>
+    /* estilos mínimos para a lista de pedidos */
+    .orders-list { max-width:1100px; margin:24px auto; padding:0 12px; }
+    .order-row { display:grid; grid-template-columns:120px 160px 1fr 120px 120px 80px; gap:8px; align-items:center;
+                 padding:12px 8px; border-bottom:1px solid rgba(0,0,0,0.06); }
+    .order-row .col { font-size:14px; color:#111; }
+    .order-empty { text-align:center; padding:36px; color:#666; }
+    .btn.small { padding:6px 8px; border-radius:6px; background:#e0ff00; color:#000; border:0; cursor:pointer; }
+  </style>
 </head>
 <body>
   <header class="topbar">
-    <div class="topbar-inner">
-      <div class="logo">
-        <img src="../assets/logo.png" alt="TicketUP" />
-      </div>
+    <div class="topbar-inner container">
+      <div class="logo"><a href="index.html"><img src="../assets/logo.png" alt="TicketUP"></a></div>
       <nav class="toplinks">
-        <a href="#">Entrar/Cadastrar</a>
-        <a href="#">Central de Ajuda</a>
-        <a href="#">Produtor de eventos</a>
-        <a href="#"><img src="../assets/instagram.png" alt="IG" class="icon-small"></a>
+        <a href="index.html">Início</a>
+        <a href="ajuda.html">Central de Ajuda</a>
       </nav>
     </div>
   </header>
 
-  <div class="page">
-    <aside class="sidebar">
-      <h2 class="menu-title">MINHA CONTA</h2>
-      <ul class="menu">
-        <li class="active">MEUS PEDIDOS</li>
-        <li>ALTERAR CADASTROS</li>
-        <li>SAIR</li>
-      </ul>
-    </aside>
+  <main>
+    <h1 style="max-width:1100px;margin:24px auto;padding:0 12px;">Meus Pedidos</h1>
+    <section class="orders-list">
+      <!-- carrinho.js irá preencher aqui -->
+    </section>
 
-    <main class="content">
-      <h1 class="page-title">MEUS PEDIDOS</h1>
+    <div style="max-width:1100px;margin:24px auto;padding:0 12px;">
+      <button id="create-test-order" class="btn small">Criar pedido de exemplo (para testes)</button>
+    </div>
+  </main>
 
-      <section class="orders-frame">
-        <div class="orders-header">
-          <span class="col cod">CÓD. DO PEDIDO</span>
-          <span class="col date">DATA</span>
-          <span class="col event">EVENTO</span>
-          <span class="col trans">TRANSAÇÃO</span>
-          <span class="col status">STATUS</span>
-          <span class="col total">TOTAL</span>
-          <span class="col actions">MOSTRAR</span>
-        </div>
+  <footer style="margin-top:40px;padding:20px;text-align:center;color:#999;">
+    © 2025 TicketUP — Todos os direitos reservados.
+  </footer>
 
-        <div class="orders-list">
-          <!-- exemplo de linha de pedido -->
-          <div class="order-row">
-            <span class="col cod">#A12345</span>
-            <span class="col date">23/10/2025</span>
-            <span class="col event">U-NITE CLASSIC</span>
-            <span class="col trans">Cartão</span>
-            <span class="col status ok">Concluído</span>
-            <span class="col total">R$ 120,00</span>
-            <span class="col actions"><button class="btn small">Ver</button></span>
-          </div>
-
-          <div class="order-row">
-            <span class="col cod">#A12346</span>
-            <span class="col date">18/10/2025</span>
-            <span class="col event">Expo gesso 2025</span>
-            <span class="col trans">Pix</span>
-            <span class="col status pending">Pendente</span>
-            <span class="col total">R$ 45,00</span>
-            <span class="col actions"><button class="btn small">Ver</button></span>
-          </div>
-
-          <!-- adicionar mais linhas conforme necessário -->
-        </div>
-      </section>
-    </main>
-  </div>
-
-<footer class="site-footer" style="position:fixed;left:0;right:0;bottom:0;text-align:center;padding:12px 0;background:#f8f8f8;border-top:1px solid #e5e5e5;">
-    <p style="margin:0;">© 2025 TicketUP — Todos os direitos reservados</p>
-</footer>
+  <script src="carrinho.js"></script>
+  <script>
+    // botão de teste: cria um pedido a partir do carrinho atual
+    document.getElementById('create-test-order').addEventListener('click', () => {
+      const pedido = createOrderFromCart({ payment_method: 'Cartão', status: 'Concluído' });
+      if (pedido) alert('Pedido criado: ' + pedido.code);
+      else alert('Carrinho vazio');
+    });
+  </script>
 </body>
 </html>

@@ -117,6 +117,59 @@ footer{
   border-top:1px solid rgba(179,255,0,0.03);
 }
 
+/* header: logo à esquerda, links agrupados à direita */
+.topbar { width:100%; padding:12px 0; box-sizing:border-box; }
+.topbar-inner {
+  display:flex;
+  align-items:center;
+  gap:16px;
+  width:100%;
+  box-sizing:border-box;
+}
+
+/* logo fica à esquerda */
+.topbar-inner .logo { flex: 0 0 auto; }
+
+/* links ficam à direita */
+.toplinks {
+  margin-left: auto;          /* empurra para a direita */
+  display:flex;
+  align-items:center;
+  gap:14px;
+  flex-wrap:wrap;
+}
+
+/* estilo básico dos links */
+.toplink {
+  color:#b3ff00;
+  text-decoration:none;
+  font-weight:600;
+  background:transparent;
+  padding:6px 10px;
+  border-radius:6px;
+}
+
+/* destaque do contador do carrinho */
+.cart-count {
+  background:#fff;
+  color:#000;
+  padding:2px 8px;
+  border-radius:999px;
+  margin-left:6px;
+  font-weight:700;
+  font-size:12px;
+}
+
+/* icone do instagram */
+.icon-link img { display:block; }
+
+/* comportamento em telas pequenas */
+@media (max-width:720px){
+  .toplinks { gap:8px; }
+  .toplink { padding:6px 8px; font-size:14px; }
+  .topbar-inner { padding:0 12px; }
+}
+
 /* responsivo */
 @media (max-width: 980px){
   .banner{ flex-direction:column; align-items:center; padding:28px; gap:20px; }
@@ -129,5 +182,215 @@ footer{
   .search input{ width:120px; }
   nav{ gap:10px; }
 }
+
+/* grid responsivo para cards */
+.events-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 24px;
+  align-items: start;
+  margin: 0 auto;
+  padding: 12px;
+}
+
+/* card com altura igual e layout vertical */
+.event-card {
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+  height: 100%; /* faz o card crescer para preencher a célula do grid */
+}
+
+/* imagem/capa do evento */
+.event-card .card-media {
+  width: 100%;
+  height: 160px;
+  background-position: center;
+  background-size: cover;
+  flex-shrink: 0;
+}
+
+/* corpo do card ocupa o restante e mantém o rodapé alinhado */
+.event-card .card-body {
+  display: flex;
+  flex-direction: column;
+  padding: 14px;
+  gap: 8px;
+  flex: 1 1 auto;
+}
+
+/* mantém título e local alinhados embaixo da imagem; garante que cards fiquem com mesma altura visual */
+.card-title {
+  font-size: 1rem;
+  margin: 0;
+  color: #111;
+}
+
+.card-venue {
+  color: #666;
+  font-size: 0.9rem;
+  margin-top: auto; /* empurra para baixo, mantendo alinhamento quando altura variar */
+}
+
+/* Ajuste genérico para alinhar cards em grid */
+.events-grid,
+.cards-grid,
+.cards,
+.list-cards,
+.row-cards,
+.grid-cards,
+.container-cards {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)) !important;
+  gap: 24px !important;
+  align-items: start !important;
+}
+
+/* Aplica estilo uniforme aos itens dentro de grids */
+.events-grid > * ,
+.cards-grid > * ,
+.cards > * ,
+.list-cards > * ,
+.row-cards > * ,
+.grid-cards > * ,
+.container-cards > * {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+}
+
+/* Garante que a imagem do topo tenha altura fixa e não distorça */
+.events-grid > * .card-media,
+.events-grid > * .img,
+.events-grid > * .thumb,
+.cards-grid > * .card-media,
+.cards-grid > * img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  background-position: center;
+  background-size: cover;
+  flex-shrink: 0;
+}
+
+/* Corpo do card ocupa o restante e alinha rodapé */
+.events-grid > * .card-body,
+.cards-grid > * .card-body,
+.events-grid > * .content,
+.cards-grid > * .content {
+  display: flex;
+  flex-direction: column;
+  padding: 12px;
+  gap: 8px;
+  flex: 1 1 auto;
+}
+
+.events-grid > * .card-body .venue,
+.events-grid > * .content .venue {
+  margin-top: auto;
+  color: #666;
+}
+
+/* Grid compacto: cards quadrados, lado a lado */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 20px;
+  align-items: start;
+  padding: 12px;
+  box-sizing: border-box;
+}
+
+/* cada cartão com altura fixa (quadrado-ish) */
+.cards-grid .card {
+  background: #ffffff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+  display: flex;
+  flex-direction: column;
+  height: 260px; /* ajuste para ficar quadrado conforme design */
+}
+
+/* imagem ocupa a parte superior do card */
+.cards-grid .card img {
+  width: 100%;
+  height: 55%;
+  object-fit: cover;
+  display: block;
+  flex-shrink: 0;
+}
+
+/* área de informação (título + local + data) */
+.cards-grid .card .info {
+  padding: 10px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex: 1 1 auto;
+  box-sizing: border-box;
+}
+
+.cards-grid .card .data {
+  background: #b3ff00;
+  color: #111;
+  border-radius: 6px;
+  padding: 8px 10px;
+  text-align: center;
+  min-width: 54px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-weight: 600;
+}
+
+.cards-grid .card .data p {
+  margin: 0;
+  font-size: 18px;
+  line-height: 1;
+}
+.cards-grid .card .data span {
+  font-size: 11px;
+  text-transform: uppercase;
+}
+
+/* título e local */
+.cards-grid .card .texto h3 {
+  margin: 0 0 6px 0;
+  font-size: 14px;
+}
+.cards-grid .card .texto p {
+  margin: 0;
+  font-size: 12px;
+  color: #666;
+}
+
+/* botão ícone do carrinho nos cards */
+.add-to-cart.icon {
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  background:#b3ff00;
+  color:#000;
+  border:0;
+  padding:8px 10px;
+  border-radius:8px;
+  cursor:pointer;
+  font-weight:700;
+  box-shadow:0 4px 12px rgba(0,0,0,0.08);
+}
+.add-to-cart.icon svg { display:block; color:#000; }
+.add-to-cart.icon.added { transform: translateY(-2px); transition:transform .18s; }
+
+/* acessibilidade: texto escondido */
+.sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); border:0; }
 
 

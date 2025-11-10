@@ -16,7 +16,7 @@
 
     <h1 id="register-title">Crie sua conta</h1>
 
-    <form action="#" method="post" onsubmit="return false;">
+    <form id="register-form" action="#" method="post" onsubmit="return false;">
       <label class="field-label" for="fullname">Nome completo</label>
       <div class="input-box">
         <i class='bx bxs-user'></i>
@@ -49,6 +49,15 @@
 
       <p class="signup">Já tem conta? <a href="../login/login.html">Entrar</a></p>
     </form>
+
+    <script>
+      // redireciona para login.html ao cadastrar
+      document.getElementById('register-form').addEventListener('submit', function(e){
+        e.preventDefault();
+        // aqui você pode validar e/ou enviar dados para o backend antes do redirect
+        window.location.href = 'login.html';
+      });
+    </script>
   </main>
 
 </body>

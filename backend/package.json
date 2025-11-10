@@ -1,6 +1,7 @@
 {
-  "name": "ticketup-backend-js",
+  "name": "ticketup-backend",
   "version": "1.0.0",
+  "description": "Backend simples para TicketUP (Express + arquivo JSON)",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",

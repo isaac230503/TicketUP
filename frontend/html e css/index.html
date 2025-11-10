@@ -10,22 +10,26 @@
   <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@200;300;400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
-  <header>
-    <div class="logo">
-      <img src="../assets/logo.png" alt="TicketUp Logo" />
-    </div>
+  <header class="topbar">
+    <div class="topbar-inner container">
+      <a class="logo" href="index.html">
+        <img src="../assets/logo.png" alt="TicketUP" style="height:44px">
+      </a>
 
-    <div class="search">
-      <input type="text" placeholder="Buscar evento..." />
-      <button aria-label="Pesquisar">🔍</button>
-    </div>
+      <nav class="toplinks">
+        <a href="ajuda.html" class="toplink">Central de Ajuda</a>
 
-    <nav>
-      <a href="#">Entrar/Cadastrar</a>
-      <a href="../html/ajuda.html">Central de Ajuda</a>
-      <a href="#">Produtor de eventos</a>
-      <a href="#"><img src="../assets/instagram.png" alt="Instagram" class="icon-small" /></a>
-    </nav>
+        <a href="https://instagram.com/seu_perfil" target="_blank" rel="noopener" class="toplink icon-link">
+          <img src="../assets/instagram.png" alt="Instagram" style="height:20px">
+        </a>
+
+        <a href="compra.html" class="toplink cart-link">
+          Carrinho <span class="cart-count">0</span>
+        </a>
+
+        <a href="login.html" class="toplink">Entrar/Cadastrar</a>
+      </nav>
+    </div>
   </header>
 
   <main>
@@ -43,17 +47,42 @@
 
     <h2 class="titulo-secao">📍 Pernambuco</h2>
 
-    <section class="cards">
+    <!-- cards organizados corretamente: container único .cards-grid -->
+    <section class="cards-grid">
       <div class="card">
         <img src="../assets/gesso.png" alt="Expo Gesso" />
         <div class="info">
           <div class="data">
-            <p>29</p>
-            <span>Nov</span>
+            <p>29</p><span>Nov</span>
           </div>
           <div class="texto">
             <h3>Expo gesso 2025</h3>
             <p>Trindade-PE</p>
+            <div class="actions">
+              <!-- antigo:
+              <button class="add-to-cart"
+                      data-event-id="1"
+                      data-ticket-id="1"
+                      data-title="Expo gesso 2025"
+                      data-price-cents="5000">
+                Adicionar
+              </button>
+              -->
+              <!-- Novo: botão ícone de carrinho (melhor aparência + data-image/data-venue) -->
+              <button class="add-to-cart icon"
+                      data-event-id="1"
+                      data-ticket-id="1"
+                      data-title="Expo gesso 2025"
+                      data-price-cents="5000"
+                      data-image="../assets/gesso.png"
+                      data-venue="Trindade-PE">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden>
+                  <path d="M6 6h15l-1.5 9h-11L6 6z" fill="currentColor"/>
+                  <circle cx="9" cy="19" r="1.2" fill="currentColor"/><circle cx="18" cy="19" r="1.2" fill="currentColor"/>
+                </svg>
+                <span class="sr-only">Adicionar ao carrinho</span>
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -62,12 +91,113 @@
         <img src="../assets/image 14.png" alt="U-NITE CLASSIC" />
         <div class="info">
           <div class="data">
-            <p>24</p>
-            <span>Out</span>
+            <p>22</p><span>Nov</span>
           </div>
           <div class="texto">
             <h3>U-NITE CLASSIC</h3>
             <p>Olinda-PE</p>
+            <div class="actions">
+              <!-- data-ticket-id e data-price-cents são importantes para checkout -->
+              <button class="add-to-cart" 
+                      data-event-id="2"
+                      data-ticket-id="2"
+                      data-title="U-NITE CLASSIC"
+                      data-price-cents="5000">
+                Adicionar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <img src="../assets/after.png" alt="The After" />
+        <div class="info">
+          <div class="data">
+            <p>23</p><span>Nov</span>
+          </div>
+          <div class="texto">
+            <h3>The After 2025</h3>
+            <p>Trindade-PE</p>
+            <div class="actions">
+              <!-- data-ticket-id e data-price-cents são importantes para checkout -->
+              <button class="add-to-cart" 
+                      data-event-id="3"
+                      data-ticket-id="3"
+                      data-title="The After 2025"
+                      data-price-cents="5000">
+                Adicionar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <img src="../assets/sambinha.png" alt="Sambinha" />
+        <div class="info">
+          <div class="data">
+            <p>29</p><span>Nov</span>
+          </div>
+          <div class="texto">
+            <h3>Sambinha 2025</h3>
+            <p>Caruaru-PE</p>
+            <div class="actions">
+              <!-- data-ticket-id e data-price-cents são importantes para checkout -->
+              <button class="add-to-cart" 
+                      data-event-id="4"
+                      data-ticket-id="4"
+                      data-title="Sambinha 2025"
+                      data-price-cents="5000">
+                Adicionar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <img src="../assets/pagobinho.png" alt="Pagobinho" />
+        <div class="info">
+          <div class="data">
+            <p>22</p><span>Nov</span>
+          </div>
+          <div class="texto">
+            <h3>Pagobinho 2025</h3>
+            <p>Arcoverde-PE</p>
+            <div class="actions">
+              <!-- data-ticket-id e data-price-cents são importantes para checkout -->
+              <button class="add-to-cart" 
+                      data-event-id="5"
+                      data-ticket-id="5"
+                      data-title="Pagobinho 2025"
+                      data-price-cents="5000">
+                Adicionar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <img src="../assets/paizao.png" alt="Paizão" />
+        <div class="info">
+          <div class="data">
+            <p>21</p><span>Nov</span>
+          </div>
+          <div class="texto">
+            <h3>Paizão 2025</h3>
+            <p>Bezerros-PE</p>
+            <div class="actions">
+              <!-- data-ticket-id e data-price-cents são importantes para checkout -->
+              <button class="add-to-cart" 
+                      data-event-id="6"
+                      data-ticket-id="6"
+                      data-title="Paizão 2025"
+                      data-price-cents="5000">
+                Adicionar
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -76,12 +206,21 @@
         <img src="../assets/jorge.png" alt="Samba de Jorge" />
         <div class="info">
           <div class="data">
-            <p>25</p>
-            <span>Out</span>
+            <p>24</p><span>Nov</span>
           </div>
           <div class="texto">
             <h3>Samba de Jorge</h3>
             <p>Recife-PE</p>
+            <div class="actions">
+              <!-- data-ticket-id e data-price-cents são importantes para checkout -->
+              <button class="add-to-cart" 
+                      data-event-id="7"
+                      data-ticket-id="7"
+                      data-title="Samba de Jorge"
+                      data-price-cents="5000">
+                Adicionar
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -91,5 +230,10 @@
   <footer>
     <p>© 2025 TicketUp - Todos os direitos reservados.</p>
   </footer>
+
+  <!-- Antes de fechar </body> inclua os scripts do carrinho -->
+  <script src="cart.js"></script>
+  <script src="add-to-cart.js"></script>
+  <script src="compra.js"></script>
 </body>
 </html>

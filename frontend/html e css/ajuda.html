@@ -10,28 +10,26 @@
 </head>
 <body>
   <header class="topbar">
-    <div class="topbar-inner">
-      <div class="logo">
-        <a href="../html e css/index.html"><img src="../assets/logo.png" alt="TicketUP logo" /></a>
-      </div>
-
-      <nav class="toplinks" aria-label="menu principal">
-        <a href="../html e css/index.html">Entrar/Cadastrar</a>
-        <a href="#">Enviar uma solicitação</a>
-        <a href="#" class="icon-link" aria-label="instagram"><img src="../assets/instagram.png" alt="Instagram"></a>
+    <div class="topbar-inner container">
+      <div class="logo"><a href="index.html"><img src="../assets/logo.png" alt="TicketUP"></a></div>
+      <nav class="toplinks">
+        <a href="login.html">Entrar/Cadastrar</a>
+        <span class="user-name" style="color:#fff;margin-left:12px"></span>
       </nav>
     </div>
   </header>
 
-  <main class="help-page">
+  <main class="help-page container">
     <section class="hero" role="region" aria-label="pesquisa de ajuda">
       <div class="hero-inner container">
         <h1>Como podemos te ajudar hoje?</h1>
 
-        <form class="search-form" action="#" onsubmit="return false;">
-          <label for="q" class="sr-only">Pesquisar dúvidas</label>
-          <input id="q" name="q" type="search" placeholder="Escreva sua dúvida aqui..." />
-          <button type="submit" aria-label="Pesquisar">Pesquisar</button>
+        <form id="help-form">
+          <input name="name" placeholder="Seu nome" />
+          <input name="email" placeholder="Seu email" />
+          <input name="subject" placeholder="Assunto" />
+          <textarea name="message" placeholder="Descreva o problema"></textarea>
+          <button type="submit">Enviar solicitação</button>
         </form>
       </div>
     </section>
