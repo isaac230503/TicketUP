@@ -10,11 +10,40 @@
     }
   ],
   "tickets": [
-    { "id": 1, "event_id": 1, "name": "INDIVIDUAL", "price_cents": 5000, "fee_cents": 500, "stock": 100 },
-    { "id": 2, "event_id": 1, "name": "INDIVIDUAL - MEIA", "price_cents": 2500, "fee_cents": 250, "stock": 50 },
-    { "id": 3, "event_id": 1, "name": "MESA (4 PESSOAS)", "price_cents": 25000, "fee_cents": 2500, "stock": 10 }
+    {
+      "id": 1,
+      "event_id": 1,
+      "name": "INDIVIDUAL",
+      "price_cents": 5000,
+      "fee_cents": 500,
+      "stock": 100
+    },
+    {
+      "id": 2,
+      "event_id": 1,
+      "name": "INDIVIDUAL - MEIA",
+      "price_cents": 2500,
+      "fee_cents": 250,
+      "stock": 50
+    },
+    {
+      "id": 3,
+      "event_id": 1,
+      "name": "MESA (4 PESSOAS)",
+      "price_cents": 25000,
+      "fee_cents": 2500,
+      "stock": 10
+    }
   ],
   "orders": [],
-  "users": [],
+  "users": [
+    {
+      "id": 1,
+      "name": "Teste",
+      "email": "teste@example.com",
+      "password": "1234",
+      "token": "ac36a33d9e8cfc60464dc97642715228470c1ccea2ffe436"
+    }
+  ],
   "help_requests": []
 }

@@ -5,8 +5,18 @@ const fs = require('fs');
 const path = require('path');
 const cors = require('cors');
 const crypto = require('crypto');
-
+const testeRoute = require('./routes/teste');
+// o app precisa existir antes de registrar middlewares/rotas que usam `app.use`
 const app = express();
+let usuarioRoutes;
+// tentar apenas importar a rota; registro será feito depois que o app estiver criado
+try {
+  usuarioRoutes = require('./routes/usuario');
+} catch (e) {
+  console.error('Erro ao carregar rota /usuarios (require):', e && e.message ? e.message : e);
+}
+
+// Porta e caminho do arquivo de dados local (fallback quando Postgres não estiver configurado)
 const PORT = process.env.PORT || 3000;
 const DATA_PATH = path.join(__dirname, 'data.json');
 
@@ -54,6 +64,10 @@ const writeData = (data) => fs.writeFileSync(DATA_PATH, JSON.stringify(data, nul
 
 app.use(cors());
 app.use(express.json());
+app.use('/teste', testeRoute);
+if (usuarioRoutes) {
+  try { app.use('/usuarios', usuarioRoutes); } catch (e) { console.error('Erro ao registrar rota /usuarios:', e && e.message ? e.message : e); }
+}
 
 // servir assets do frontend (se existir)
 const assetsDir = path.join(__dirname, '..', 'frontend', 'assets');
@@ -75,13 +89,67 @@ if (fs.existsSync(frontendDir)) {
 // ===== fim do trecho novo =====
 
 // rotas
-app.get('/api/events', (req, res) => {
+app.get('/api/events', async (req, res) => {
+  // Se existir configuração de DB (arquivo backend/db.js), usa PostgreSQL.
+  if (typeof require === 'function') {
+    try {
+      const db = require('./db');
+      // mapeia EVENTO -> formato esperado pelo frontend
+      const q = `SELECT id_evento, data_horario_inicio, endereco, nome, descricao
+                 FROM evento
+                 ORDER BY data_horario_inicio`;
+      const result = await db.query(q);
+      const events = result.rows.map(r => ({
+        id: r.id_evento,
+        title: r.nome,
+        date: r.data_horario_inicio,
+        venue: r.endereco,
+        image: null,
+        description: r.descricao
+      }));
+      return res.json(events);
+    } catch (err) {
+      // não conseguiu usar DB — cairá para o fallback em data.json
+      console.log('Postgres não disponível ou erro ao consultar eventos:', err.message || err);
+    }
+  }
   const data = readData();
   res.json(data.events);
 });
 
-app.get('/api/events/:id', (req, res) => {
+app.get('/api/events/:id', async (req, res) => {
   const id = Number(req.params.id);
+  if (typeof require === 'function') {
+    try {
+      const db = require('./db');
+      // Buscar evento
+      const evQ = 'SELECT id_evento, data_horario_inicio, endereco, nome, descricao FROM evento WHERE id_evento = $1';
+      const evRes = await db.query(evQ, [id]);
+      if (evRes.rowCount === 0) return res.status(404).json({ error: 'Evento não encontrado' });
+      const r = evRes.rows[0];
+      // Buscar ingressos relacionados (join via setor)
+      const tkQ = `SELECT t.id_tipo_ingresso AS id, t.nome AS name, (t.preco_final * 100)::bigint AS price_cents,
+                          (t.taxa_servico * 100)::bigint AS fee_cents,
+                          COALESCE(ei.quantidade_total - ei.quantidade_vendida, 0) AS stock
+                   FROM tipo_ingresso t
+                   JOIN setor s ON t.id_setor = s.id_setor
+                   LEFT JOIN estoque_ingresso ei ON ei.id_tipo_ingresso = t.id_tipo_ingresso
+                   WHERE s.id_evento = $1`;
+      const tkRes = await db.query(tkQ, [id]);
+      const event = {
+        id: r.id_evento,
+        title: r.nome,
+        date: r.data_horario_inicio,
+        venue: r.endereco,
+        image: null,
+        description: r.descricao
+      };
+      const tickets = tkRes.rows.map(t => ({ id: t.id, event_id: id, name: t.name, price_cents: Number(t.price_cents || 0), fee_cents: Number(t.fee_cents || 0), stock: Number(t.stock || 0) }));
+      return res.json({ ...event, tickets });
+    } catch (err) {
+      console.log('Postgres não disponível ou erro em /api/events/:id:', err.message || err);
+    }
+  }
   const data = readData();
   const event = data.events.find(e => e.id === id);
   if (!event) return res.status(404).json({ error: 'Evento não encontrado' });
@@ -137,6 +205,7 @@ function findUserByToken(token){
 
 app.post('/api/auth/register', (req, res) => {
   const { name, email, password } = req.body || {};
+  console.log('POST /api/auth/register payload:', { name, email: (email||'').slice(0,40), hasPassword: !!password });
   if (!name || !email || !password) return res.status(400).json({ error: 'Dados insuficientes' });
 
   const data = readData();
@@ -146,16 +215,41 @@ app.post('/api/auth/register', (req, res) => {
   const token = crypto.randomBytes(24).toString('hex');
   const user = { id, name, email, password, token }; // PARA APRENDIZADO: em produção, sempre hashear a senha
   data.users.push(user);
-  writeData(data);
+  try {
+    writeData(data);
+  } catch (e) {
+    console.error('Falha ao escrever data.json:', e && e.message ? e.message : e);
+    return res.status(500).json({ error: 'Erro ao salvar usuário' });
+  }
+  console.log('Usuário registrado:', { id, name, email });
   return res.status(201).json({ id, name, email, token });
 });
 
-app.post('/api/auth/login', (req, res) => {
+app.post('/api/auth/login', async (req, res) => {
   const { email, password } = req.body || {};
   if (!email || !password) return res.status(400).json({ error: 'Email e senha são obrigatórios' });
 
   const data = readData();
   const user = data.users.find(u => u.email === email && u.password === password);
+
+  // registrar tentativa de login no Postgres (se disponível) — não bloquear por falha
+  try {
+    if (typeof require === 'function') {
+      try {
+        const db = require('./db');
+        await db.query(
+          'INSERT INTO login_attempt (email, success, ip_address, user_agent) VALUES ($1,$2,$3,$4)',
+          [email, !!user, req.ip || null, req.get('User-Agent') || null]
+        );
+      } catch (e) {
+        // erro ao gravar no DB — apenas logamos no console
+        console.error('Falha ao gravar login_attempt no DB:', e && e.message ? e.message : e);
+      }
+    }
+  } catch (e) {
+    console.error('Erro inesperado ao tentar logar tentativa:', e && e.message ? e.message : e);
+  }
+
   if (!user) return res.status(401).json({ error: 'Credenciais inválidas' });
 
   // renova token
