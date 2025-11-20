@@ -392,5 +392,113 @@ footer{
 
 /* acessibilidade: texto escondido */
 .sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); border:0; }
+/* ...existing code... */
+
+/* correção: garante que o carrossel fique horizontal e sem wrap */
+.caixa-eventos .carousel { display:flex; align-items:flex-start; gap:12px; position:relative; }
+#carousel-track {
+  display:flex !important;
+  flex-direction:row !important;
+  flex-wrap:nowrap !important;    /* impedir quebra para a próxima linha */
+  gap:12px;
+  overflow-x:auto;                /* rolagem horizontal */
+  overflow-y:hidden;              /* esconder barra vertical */
+  scroll-behavior:smooth;
+  padding:6px 4px;
+  -webkit-overflow-scrolling:touch;
+}
+
+/* cada card tem largura fixa e não cresce */
+.carousel-card {
+  flex: 0 0 220px !important;
+  width: 220px !important;
+  min-width: 220px;
+  max-width: 220px;
+  display:flex;
+  flex-direction:column;
+  background:#111;
+  color:#fff;
+  border-radius:8px;
+  overflow:hidden;
+}
+
+/* garante que imagem preencha sem alterar proporção */
+.carousel-card img {
+  display:block;
+  width:100%;
+  height:120px;
+  object-fit:cover;
+}
+
+/* esconder scroll vertical residual em alguns browsers */
+#carousel-track::-webkit-scrollbar { height:8px; }
+#carousel-track::-webkit-scrollbar-thumb { background:rgba(255,255,255,0.08); border-radius:8px; }
+
+/* em telas muito pequenas reduz a largura do card */
+@media (max-width:420px){
+  .carousel-card { flex:0 0 160px; width:160px; min-width:160px; }
+}
+
+/* centraliza setas do carrossel verticalmente e melhora estilo */
+.caixa-eventos .carousel { position:relative; align-items:center; }
+.caixa-eventos .carousel .carousel-nav {
+  position:absolute;
+  top:50%;
+  transform:translateY(-50%);
+  width:40px;
+  height:40px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:20;
+  cursor:pointer;
+  border-radius:8px;
+  background:rgba(0,0,0,0.45);
+  color:var(--accent, #b3ff00);
+  border:1px solid rgba(255,255,255,0.06);
+  box-shadow:0 6px 20px rgba(0,0,0,0.3);
+  pointer-events:auto;
+}
+
+/* posição das setas esquerda/direita */
+.caixa-eventos .carousel .carousel-nav.prev { left:6px; }
+.caixa-eventos .carousel .carousel-nav.next { right:6px; }
+
+/* se o layout empurrar as setas pra fora do box, garanta overflow visível */
+.caixa-eventos { overflow:visible; }
+
+/* melhora touch targets em telas pequenas */
+@media (max-width:900px){
+  .caixa-eventos .carousel .carousel-nav { display:flex; opacity:0.95; background:rgba(0,0,0,0.55); }
+}
+
+/* dots de paginação do carrossel (substitui botão/rodapé) */
+.carousel-dots {
+  display:flex;
+  gap:8px;
+  justify-content:center;
+  align-items:center;
+  margin-top:12px;
+  padding:6px 0;
+}
+.carousel-dots button {
+  width:10px;
+  height:10px;
+  border-radius:50%;
+  border:0;
+  background:rgba(255,255,255,0.12);
+  cursor:pointer;
+  transition:transform .14s, background .14s, box-shadow .14s;
+  box-shadow:0 2px 6px rgba(0,0,0,0.25);
+}
+.carousel-dots button.active {
+  background:var(--accent, #b3ff00);
+  transform:scale(1.25);
+  box-shadow:0 6px 16px rgba(179,255,0,0.12);
+}
+@media (max-width:600px){
+  .carousel-dots { gap:6px; }
+  .carousel-dots button { width:9px; height:9px; }
+}
 
 

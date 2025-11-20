@@ -6,6 +6,7 @@
   <title>TicketUp - Eventos</title>
 
   <!-- css local (mesma pasta deste HTML) -->
+   
   <link rel="stylesheet" href="index.css" />
   <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@200;300;400;500;600&display=swap" rel="stylesheet">
 </head>
@@ -13,13 +14,13 @@
   <header class="topbar">
     <div class="topbar-inner container">
       <a class="logo" href="index.html">
-        <img src="../assets/logo.png" alt="TicketUP" style="height:44px">
+        <img src="../assets/logo.png" alt="TicketUP" style="height:60px">
       </a>
 
       <nav class="toplinks">
         <a href="ajuda.html" class="toplink">Central de Ajuda</a>
 
-        <a href="https://instagram.com/seu_perfil" target="_blank" rel="noopener" class="toplink icon-link">
+        <a href="https://instagram.com/ticket__up" target="_blank" rel="noopener" class="toplink icon-link">
           <img src="../assets/instagram.png" alt="Instagram" style="height:20px">
         </a>
 
@@ -39,8 +40,60 @@
         <div class="caixa-eventos">
           <h3>Próximos eventos</h3>
           <p>Garanta seu ingresso</p>
-          <div class="setas" aria-hidden="true">◀ ▶</div>
-          <button class="agenda-btn">Agenda Outubro 2025</button>
+          <div class="carousel" id="upcoming-carousel" aria-label="Próximos eventos">
+            <button class="carousel-nav prev" aria-label="Anterior">◀</button>
+
+            <div class="carousel-track" id="carousel-track">
+              <!-- card 1 -->
+              <article class="carousel-card">
+                <img src="../assets/gesso.png" alt="Expo gesso" />
+                <div class="card-caption">
+                  <strong>Expo gesso 2025</strong>
+                  <span class="muted">Trindade‑PE • 29 Nov</span>
+                </div>
+              </article>
+
+              <!-- card 2 -->
+              <article class="carousel-card">
+                <img src="../assets/image 14.png" alt="U-NITE CLASSIC" />
+                <div class="card-caption">
+                  <strong>U‑NITE CLASSIC</strong>
+                  <span class="muted">Olinda‑PE • 22 Nov</span>
+                </div>
+              </article>
+
+              <!-- card 3 -->
+              <article class="carousel-card">
+                <img src="../assets/after.png" alt="The After" />
+                <div class="card-caption">
+                  <strong>The After 2025</strong>
+                  <span class="muted">Trindade‑PE • 23 Nov</span>
+                </div>
+              </article>
+
+              <!-- card 4 -->
+              <article class="carousel-card">
+                <img src="../assets/sambinha.png" alt="Sambinha" />
+                <div class="card-caption">
+                  <strong>Sambinha 2025</strong>
+                  <span class="muted">Caruaru‑PE • 29 Nov</span>
+                </div>
+              </article>
+
+              <!-- card 5 -->
+              <article class="carousel-card">
+                <img src="../assets/jorge.png" alt="Samba de Jorge" />
+                <div class="card-caption">
+                  <strong>Samba de Jorge</strong>
+                  <span class="muted">Recife‑PE • 24 Nov</span>
+                </div>
+              </article>
+            </div>
+
+            <button class="carousel-nav next" aria-label="Próximo">▶</button>
+          </div>
+
+          <div class="carousel-dots" aria-hidden="false"></div>
         </div>
       </div>
     </section>
@@ -97,12 +150,13 @@
             <h3>U-NITE CLASSIC</h3>
             <p>Olinda-PE</p>
             <div class="actions">
-              <!-- data-ticket-id e data-price-cents são importantes para checkout -->
-              <button class="add-to-cart" 
+              <button class="add-to-cart"
                       data-event-id="2"
                       data-ticket-id="2"
                       data-title="U-NITE CLASSIC"
-                      data-price-cents="5000">
+                      data-price-cents="5000"
+                      data-image="../assets/image 14.png"
+                      data-venue="Olinda-PE">
                 Adicionar
               </button>
             </div>
@@ -120,12 +174,13 @@
             <h3>The After 2025</h3>
             <p>Trindade-PE</p>
             <div class="actions">
-              <!-- data-ticket-id e data-price-cents são importantes para checkout -->
-              <button class="add-to-cart" 
+              <button class="add-to-cart"
                       data-event-id="3"
                       data-ticket-id="3"
                       data-title="The After 2025"
-                      data-price-cents="5000">
+                      data-price-cents="5000"
+                      data-image="../assets/after.png"
+                      data-venue="Trindade-PE">
                 Adicionar
               </button>
             </div>
@@ -143,12 +198,13 @@
             <h3>Sambinha 2025</h3>
             <p>Caruaru-PE</p>
             <div class="actions">
-              <!-- data-ticket-id e data-price-cents são importantes para checkout -->
-              <button class="add-to-cart" 
+              <button class="add-to-cart"
                       data-event-id="4"
                       data-ticket-id="4"
                       data-title="Sambinha 2025"
-                      data-price-cents="5000">
+                      data-price-cents="5000"
+                      data-image="../assets/sambinha.png"
+                      data-venue="Caruaru-PE">
                 Adicionar
               </button>
             </div>
@@ -166,12 +222,13 @@
             <h3>Pagobinho 2025</h3>
             <p>Arcoverde-PE</p>
             <div class="actions">
-              <!-- data-ticket-id e data-price-cents são importantes para checkout -->
-              <button class="add-to-cart" 
+              <button class="add-to-cart"
                       data-event-id="5"
                       data-ticket-id="5"
                       data-title="Pagobinho 2025"
-                      data-price-cents="5000">
+                      data-price-cents="5000"
+                      data-image="../assets/pagobinho.png"
+                      data-venue="Arcoverde-PE">
                 Adicionar
               </button>
             </div>
@@ -189,12 +246,13 @@
             <h3>Paizão 2025</h3>
             <p>Bezerros-PE</p>
             <div class="actions">
-              <!-- data-ticket-id e data-price-cents são importantes para checkout -->
-              <button class="add-to-cart" 
+              <button class="add-to-cart"
                       data-event-id="6"
                       data-ticket-id="6"
                       data-title="Paizão 2025"
-                      data-price-cents="5000">
+                      data-price-cents="5000"
+                      data-image="../assets/paizao.png"
+                      data-venue="Bezerros-PE">
                 Adicionar
               </button>
             </div>
@@ -212,14 +270,100 @@
             <h3>Samba de Jorge</h3>
             <p>Recife-PE</p>
             <div class="actions">
-              <!-- data-ticket-id e data-price-cents são importantes para checkout -->
-              <button class="add-to-cart" 
+              <button class="add-to-cart"
                       data-event-id="7"
                       data-ticket-id="7"
                       data-title="Samba de Jorge"
-                      data-price-cents="5000">
+                      data-price-cents="5000"
+                      data-image="../assets/jorge.png"
+                      data-venue="Recife-PE">
                 Adicionar
               </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="card">
+        <img src="../assets/aina.png" alt="Aina Open Air" />
+        <div class="info">
+          <div class="data"><p>20</p><span>Nov</span></div>
+          <div class="texto">
+            <h3>Aina 2025</h3>
+            <p>Recife-PE</p>
+            <div class="actions">
+              <button class="add-to-cart" data-event-id="8" data-ticket-id="8" data-title="Aina 2025" data-price-cents="7000" data-image="../assets/aina.png" data-venue="Recife-PE">Adicionar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <img src="../assets/galo.png" alt="Quinta no Galo" />
+        <div class="info">
+          <div class="data"><p>12</p><span>Dez</span></div>
+          <div class="texto">
+            <h3>Quinta no Galo</h3>
+            <p>Olinda-PE</p>
+            <div class="actions">
+              <button class="add-to-cart" data-event-id="9" data-ticket-id="9" data-title="Quinta no Galo" data-price-cents="6000" data-image="../assets/galo.png" data-venue="Olinda-PE">Adicionar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <img src="../assets/guarda.png" alt="Jovem Guarda" />
+        <div class="info">
+          <div class="data"><p>15</p><span>Dez</span></div>
+          <div class="texto">
+            <h3>Jovem Guarda</h3>
+            <p>Caruaru-PE</p>
+            <div class="actions">
+              <button class="add-to-cart" data-event-id="10" data-ticket-id="10" data-title="Jovem Guarda" data-price-cents="8000" data-image="../assets/guarda.png" data-venue="Caruaru-PE">Adicionar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <img src="../assets/image 17.png" alt="Geek Verse" />
+        <div class="info">
+          <div class="data"><p>18</p><span>Dez</span></div>
+          <div class="texto">
+            <h3>Geek Verse</h3>
+            <p>Caruaru-PE</p>
+            <div class="actions">
+              <button class="add-to-cart" data-event-id="11" data-ticket-id="11" data-title="Geek Verse" data-price-cents="4500" data-image="../assets/image 17.png" data-venue="Caruaru-PE">Adicionar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <img src="../assets/forromulher.png" alt="Forró Mulher" />
+        <div class="info">
+          <div class="data"><p>06</p><span>Dez</span></div>
+          <div class="texto">
+            <h3>Forró Mulher</h3>
+            <p>Recife-PE</p>
+            <div class="actions">
+              <button class="add-to-cart" data-event-id="12" data-ticket-id="12" data-title="Forró Mulher" data-price-cents="6500" data-image="../assets/forromulher.png" data-venue="Recife-PE">Adicionar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <img src="../assets/bikini.png" alt="Bikini Memories" />
+        <div class="info">
+          <div class="data"><p>20</p><span>Nov</span></div>
+          <div class="texto">
+            <h3>Bikini Memories</h3>
+            <p>Porto-PE</p>
+            <div class="actions">
+              <button class="add-to-cart" data-event-id="13" data-ticket-id="13" data-title="Bikini Memories" data-price-cents="12000" data-image="../assets/bikini.png" data-venue="Porto-PE">Adicionar</button>
             </div>
           </div>
         </div>
@@ -231,9 +375,10 @@
     <p>© 2025 TicketUp - Todos os direitos reservados.</p>
   </footer>
 
-  <!-- Antes de fechar </body> inclua os scripts do carrinho -->
+
   <script src="cart.js"></script>
   <script src="add-to-cart.js"></script>
   <script src="compra.js"></script>
+  <script src="upcoming.js"></script>
 </body>
 </html>

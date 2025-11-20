@@ -17,7 +17,7 @@ function addItemFromButton(btn){
     description: btn.dataset.description || btn.getAttribute('data-description') || '',
     price_cents: Number(btn.dataset.priceCents || btn.getAttribute('data-price-cents') || 0),
     qty: 1,
-    image: btn.dataset.image || btn.getAttribute('data-image') || '../assets/placeholder.png',
+    image: btn.dataset.image || btn.getAttribute('data-image') || '../assets/placeholder.png', // garante imagem
     venue: btn.dataset.venue || btn.getAttribute('data-venue') || ''
   };
   const cart = loadCart();
