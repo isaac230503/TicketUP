@@ -9,6 +9,7 @@
   <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
   <link rel="stylesheet" href="register.css">
 </head>
+
 <body class="register-page">
 
   <main class="register-card" role="main" aria-labelledby="register-title">
@@ -16,14 +17,17 @@
 
     <h1 id="register-title">Crie sua conta</h1>
 
-    <form id="register-form" action="#" method="post" onsubmit="return false;">
-      <label class="field-label" for="fullname">Nome completo</label>
+    <!-- FORM CORRIGIDO -->
+    <!-- Removido action="register.html" para evitar erro POST /register.html -->
+    <form id="register-form">
+
+      <label class="field-label" for="name">Nome completo</label>
       <div class="input-box">
         <i class='bx bxs-user'></i>
-        <input id="fullname" name="fullname" type="text" placeholder="Seu nome completo" required>
+        <input id="name" name="name" type="text" placeholder="Seu nome completo" required>
       </div>
 
-      <label class="field-label" for="email">E‑mail</label>
+      <label class="field-label" for="email">E-mail</label>
       <div class="input-box">
         <i class='bx bxs-envelope'></i>
         <input id="email" name="email" type="email" placeholder="seu@email.com" required>
@@ -50,14 +54,11 @@
       <p class="signup">Já tem conta? <a href="/login.html">Entrar</a></p>
     </form>
 
-    <script>
-      // redireciona para login.html ao cadastrar
-      document.getElementById('register-form').addEventListener('submit', function(e){
-        e.preventDefault();
-        // aqui você pode validar e/ou enviar dados para o backend antes do redirect
-        window.location.href = 'login.html';
-      });
-    </script>
+    <!-- 🔥 Removido requireAuth() (não deve existir em página pública) -->
+
+    <!-- Script real de registro -->
+    <script src="register.js"></script>
+
   </main>
 
 </body>

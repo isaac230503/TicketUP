@@ -42,7 +42,16 @@
   </footer>
 
   <script src="carrinho.js"></script>
-  <script>
+   <script src="../assets/auth-guard.js"></script>
+ <script src="auth.js"></script>
+<script>
+  requireAuth();
+</script>
+
+<script>
+    protegerPagina();
+</script>
+ <script>
     // botão de teste: cria um pedido a partir do carrinho atual
     document.getElementById('create-test-order').addEventListener('click', () => {
       const pedido = createOrderFromCart({ payment_method: 'Cartão', status: 'Concluído' });
@@ -50,5 +59,11 @@
       else alert('Carrinho vazio');
     });
   </script>
+  <script src="auth.js"></script>
+<script>
+    requireAuth();
+</script>
+
+  
 </body>
 </html>

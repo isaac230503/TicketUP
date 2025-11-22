@@ -43,6 +43,13 @@
       "email": "teste@example.com",
       "password": "1234",
       "token": "ac36a33d9e8cfc60464dc97642715228470c1ccea2ffe436"
+    },
+    {
+      "id": 2,
+      "name": "qwq",
+      "email": "ddd@gmail.com",
+      "password": "$2b$10$G44FIAQFyC1qVhV.CqLWpODn6s44xTwbvETLg.veZeusKibSZCAO2",
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZW1haWwiOiJkZGRAZ21haWwuY29tIiwiaWF0IjoxNzYzODQwMTY4LCJleHAiOjE3NjM4Njg5Njh9.kU6xLIHT8_8Ps4tOERR1E0_nWPRQ0IDWK23fHNRZDeg"
     }
   ],
   "help_requests": []

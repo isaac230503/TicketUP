@@ -5,28 +5,28 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tela de Login</title>
 
-  <!-- carregar fonte -->
   <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;500&display=swap" rel="stylesheet">
-
-  <!-- CSS correto (arquivo presente na mesma pasta) -->
   <link rel="stylesheet" href="login.css">
 </head>
+
 <body>
+
   <div class="login-container">
     <div class="logo">
-      <!-- caminho para a pasta assets (um nível acima da pasta login) -->
       <img src="../assets/logo.png" alt="Logo">
     </div>
 
-    <div class="form">
+    <!-- FORMULÁRIO CORRIGIDO -->
+    <form id="login-form" class="form">
+
       <div class="input-group">
-        <label for="usuario">Usuário</label>
-        <input type="text" id="usuario" placeholder="Digite seu usuário">
+        <label for="email">Email</label>
+        <input type="text" id="email" placeholder="Digite seu email">
       </div>
 
       <div class="input-group">
-        <label for="senha">Senha</label>
-        <input type="password" id="senha" placeholder="Digite sua senha">
+        <label for="password">Senha</label>
+        <input type="password" id="password" placeholder="Digite sua senha">
       </div>
 
       <div class="extras">
@@ -34,68 +34,15 @@
         <a href="register.html">Esqueci minha senha</a>
       </div>
 
-      <button class="btn-login">Login</button>
+      <button type="submit" class="btn-login">Login</button>
 
       <p class="register">Não possui uma conta? <a href="register.html">Registre-se</a></p>
-    </div>
+    </form>
+
   </div>
 
-  <!-- Coloque este script antes de </body> -->
-  <script>
-    // Opção A – redirecionamento simples (sem backend)
-    (function simpleRedirect(){
-      const form = document.querySelector('#login-form');
-      if (!form) return;
-      form.addEventListener('submit', (e) => {
-        e.preventDefault();
-        // aqui poderia validar campos localmente
-        window.location.href = 'index.html';
-      });
-    })();
+  <!-- Scripts corretos -->
+  <script src="login.js"></script>
 
-    // Opção B – autenticação com backend e redirecionamento (use se tiver /api/auth/login)
-    (function authThenRedirect(){
-      const form = document.querySelector('#login-form');
-      if (!form) return;
-      form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const email = form.querySelector('input[name="email"]')?.value;
-        const password = form.querySelector('input[name="password"]')?.value;
-        if (!email || !password) {
-          alert('Preencha email e senha');
-          return;
-        }
-        try {
-          const res = await fetch('http://localhost:3000/api/auth/login', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email, password })
-          });
-          if (!res.ok) {
-            const err = await res.json().catch(()=>({ error: 'Erro' }));
-            alert(err.error || 'Credenciais inválidas');
-            return;
-          }
-          const data = await res.json();
-          localStorage.setItem('token', data.token);
-          localStorage.setItem('user', JSON.stringify({ id: data.id, name: data.name, email: data.email }));
-          window.location.href = 'index.html';
-        } catch (err) {
-          alert('Erro de conexão com o servidor');
-          console.error(err);
-        }
-      }, { once: true });
-    })();
-
-    // redireciona ao clicar no botão Login
-    (function(){
-      const btn = document.querySelector('.btn-login');
-      if (!btn) return;
-      btn.addEventListener('click', (e) => {
-        e.preventDefault(); // evita comportamento padrão caso esteja dentro de form
-        window.location.href = 'index.html';
-      });
-    })();
-  </script>
 </body>
 </html>

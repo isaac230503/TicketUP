@@ -5,19 +5,49 @@ const fs = require('fs');
 const path = require('path');
 const cors = require('cors');
 const crypto = require('crypto');
-const testeRoute = require('./routes/teste');
-// o app precisa existir antes de registrar middlewares/rotas que usam `app.use`
-const app = express();
+require("dotenv").config();
+
+const PORT = process.env.PORT || 3000;
+
+// === Segurança ===
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const rateLimit = require("express-rate-limit");
+const helmet = require("helmet");
+const { check, validationResult } = require("express-validator");
+const cookieParser = require("cookie-parser");
+
+const app = express();      
+app.use(cookieParser());    
+        // 2º usa o cookieParser
+
+
+// JWT secret (defina em .env como JWT_SECRET)
+const JWT_SECRET = process.env.JWT_SECRET || 'changeme_jwt_secret';
+
+// === Middlewares globais ===
+// 🚨 NÃO REPETIR ESTES TRÊS NUNCA MAIS!
+app.use(express.json());
+app.use(cors());
+app.use(helmet());
+
+// Rate limit para login
+const loginLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 5,
+  message: "Muitas tentativas de login. Tente novamente mais tarde."
+});
+
+// Carregar rotas de usuário
 let usuarioRoutes;
-// tentar apenas importar a rota; registro será feito depois que o app estiver criado
 try {
   usuarioRoutes = require('./routes/usuario');
+  app.use("/usuarios", usuarioRoutes);
 } catch (e) {
-  console.error('Erro ao carregar rota /usuarios (require):', e && e.message ? e.message : e);
+  console.error('Erro ao carregar rota /usuarios:', e?.message || e);
 }
 
-// Porta e caminho do arquivo de dados local (fallback quando Postgres não estiver configurado)
-const PORT = process.env.PORT || 3000;
+// Caminho dos dados locais (fallback)
 const DATA_PATH = path.join(__dirname, 'data.json');
 
 function ensureDataFile() {
@@ -62,11 +92,12 @@ ensureDataFile();
 const readData = () => JSON.parse(fs.readFileSync(DATA_PATH, 'utf8'));
 const writeData = (data) => fs.writeFileSync(DATA_PATH, JSON.stringify(data, null, 2));
 
-app.use(cors());
-app.use(express.json());
-app.use('/teste', testeRoute);
-if (usuarioRoutes) {
-  try { app.use('/usuarios', usuarioRoutes); } catch (e) { console.error('Erro ao registrar rota /usuarios:', e && e.message ? e.message : e); }
+// if testeRoute exists, register it (preserve existing behavior)
+try {
+  const testeRoute = require('./routes/teste');
+  app.use('/teste', testeRoute);
+} catch (e) {
+  // não obrigatório
 }
 
 // servir assets do frontend (se existir)
@@ -197,13 +228,13 @@ app.get('/api/orders/:id', (req, res) => {
   res.json(order);
 });
 
-// ===== Adição: auth simples e help requests =====
+// ===== Adição: auth simples and help requests =====
 function findUserByToken(token){
   const data = readData();
   return data.users.find(u => u.token === token);
 }
 
-app.post('/api/auth/register', (req, res) => {
+app.post('/api/auth/register', async (req, res) => {
   const { name, email, password } = req.body || {};
   console.log('POST /api/auth/register payload:', { name, email: (email||'').slice(0,40), hasPassword: !!password });
   if (!name || !email || !password) return res.status(400).json({ error: 'Dados insuficientes' });
@@ -212,8 +243,14 @@ app.post('/api/auth/register', (req, res) => {
   if (data.users.find(u => u.email === email)) return res.status(400).json({ error: 'Email já cadastrado' });
 
   const id = (data.users.reduce((m,u)=>Math.max(m,u.id||0),0) || 0) + 1;
-  const token = crypto.randomBytes(24).toString('hex');
-  const user = { id, name, email, password, token }; // PARA APRENDIZADO: em produção, sempre hashear a senha
+
+  // HASH da senha (segurança)
+  const hashedPassword = await bcrypt.hash(password, 10);
+
+  // gerar token JWT
+  const token = jwt.sign({ id, email }, JWT_SECRET, { expiresIn: '8h' });
+
+  const user = { id, name, email, password: hashedPassword, token };
   data.users.push(user);
   try {
     writeData(data);
@@ -222,15 +259,16 @@ app.post('/api/auth/register', (req, res) => {
     return res.status(500).json({ error: 'Erro ao salvar usuário' });
   }
   console.log('Usuário registrado:', { id, name, email });
+  // não retornar a senha
   return res.status(201).json({ id, name, email, token });
 });
 
-app.post('/api/auth/login', async (req, res) => {
+app.post("/api/auth/login", loginLimiter, async (req, res) => {
   const { email, password } = req.body || {};
   if (!email || !password) return res.status(400).json({ error: 'Email e senha são obrigatórios' });
 
   const data = readData();
-  const user = data.users.find(u => u.email === email && u.password === password);
+  const user = data.users.find(u => u.email === email);
 
   // registrar tentativa de login no Postgres (se disponível) — não bloquear por falha
   try {
@@ -250,10 +288,14 @@ app.post('/api/auth/login', async (req, res) => {
     console.error('Erro inesperado ao tentar logar tentativa:', e && e.message ? e.message : e);
   }
 
+  // verificar user e senha (com bcrypt)
   if (!user) return res.status(401).json({ error: 'Credenciais inválidas' });
+  const match = await bcrypt.compare(password, user.password);
+  if (!match) return res.status(401).json({ error: 'Credenciais inválidas' });
 
-  // renova token
-  user.token = crypto.randomBytes(24).toString('hex');
+  // renova token JWT
+  const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, { expiresIn: '8h' });
+  user.token = token;
   writeData(data);
   return res.json({ id: user.id, name: user.name, email: user.email, token: user.token });
 });
@@ -261,6 +303,12 @@ app.post('/api/auth/login', async (req, res) => {
 app.get('/api/me', (req, res) => {
   const auth = (req.headers.authorization || '').replace('Bearer ', '');
   if (!auth) return res.status(401).json({ error: 'Sem autorização' });
+  // tentar verificar JWT (se for válido)
+  try {
+    jwt.verify(auth, JWT_SECRET);
+  } catch (e) {
+    return res.status(401).json({ error: 'Token inválido' });
+  }
   const user = findUserByToken(auth);
   if (!user) return res.status(401).json({ error: 'Token inválido' });
   return res.json({ id: user.id, name: user.name, email: user.email });
@@ -270,12 +318,16 @@ app.get('/api/me', (req, res) => {
 app.post('/api/help/requests', (req, res) => {
   const auth = (req.headers.authorization || '').replace('Bearer ', '');
   if (!auth) return res.status(401).json({ error: 'Sem autorização' });
+  try {
+    jwt.verify(auth, JWT_SECRET);
+  } catch (e) {
+    return res.status(401).json({ error: 'Token inválido' });
+  }
   const user = findUserByToken(auth);
   if (!user) return res.status(401).json({ error: 'Token inválido' });
-
   const { subject, message } = req.body || {};
   if (!subject || !message) return res.status(400).json({ error: 'Campos obrigatórios' });
-
+  
   const data = readData();
   const id = (data.help_requests.reduce((m,r)=>Math.max(m,r.id||0),0) || 0) + 1;
   const reqObj = {
