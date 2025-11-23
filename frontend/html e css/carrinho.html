@@ -12,6 +12,12 @@
       margin:24px auto; 
       padding:0 12px;
     }
+.orders-list,
+.order-row,
+.order-item,
+.order-header {
+  color: #111 !important;
+}
 
     .order-row {
       background:#fff;
@@ -48,7 +54,6 @@
 
   <header class="topbar">
     <div class="topbar-inner container">
-
       <a href="index.html">
         <img src="../assets/logo.png" alt="TicketUP" style="height:48px">
       </a>
@@ -57,14 +62,13 @@
         <a href="index.html">Início</a>
         <a href="ajuda.html">Central de Ajuda</a>
       </nav>
-
     </div>
   </header>
 
   <main>
     <h1 style="max-width:1100px;margin:24px auto;padding:0 12px;">Meus Pedidos</h1>
 
-    <section id="orders-list" class="orders-list"></section>
+    <section class="orders-list" id="orders-list"></section>
   </main>
 
   <footer style="margin-top:40px;padding:20px;text-align:center;color:#999;">
@@ -72,107 +76,98 @@
   </footer>
 
   <script>
-  // ===============================
-  // 📌 Obter token
-  // ===============================
-  function getToken() {
-    return localStorage.getItem("token");
-  }
-
-  let TICKETS_CACHE = {};
-
-  // ===============================
-  // 📌 Carregar tickets do data.json
-  // ===============================
-  async function loadTickets() {
-    try {
-      const res = await fetch("/data.json");
-      const json = await res.json();
-      json.tickets.forEach(t => {
-        TICKETS_CACHE[t.id] = t;
-      });
-    } catch (e) {
-      console.warn("Erro carregando tickets:", e);
-    }
-  }
-
-  // ===============================
-  // 📌 Carregar pedidos do usuário
-  // ===============================
-  async function loadMyOrders() {
-    const token = getToken();
-    const container = document.querySelector(".orders-list");
-
-    if (!container) return;
-
-    if (!token) {
-      container.innerHTML = `
-        <p class="order-empty">Você precisa estar logado para ver seus pedidos.</p>
-      `;
-      return;
+    function getToken() {
+      return localStorage.getItem("token");
     }
 
-    await loadTickets();
+    // Cache global de tickets
+    let TICKETS_CACHE = {};
 
-    try {
-      const res = await fetch("/api/orders", {
-        headers: { "Authorization": "Bearer " + token }
-      });
+    // ================================
+    // 1️⃣ Carregar tickets do backend
+    // ================================
+    async function loadTickets() {
+      try {
+        const res = await fetch("/data.json"); // CAMINHO CORRETO
+        const json = await res.json();
 
-      if (!res.ok) {
-        container.innerHTML = `<p class="order-empty">❌ Erro ao carregar pedidos.</p>`;
+        json.tickets.forEach(t => {
+          TICKETS_CACHE[t.id] = t;
+        });
+
+      } catch (e) {
+        console.warn("Erro carregando tickets:", e);
+      }
+    }
+
+    // ================================
+    // 2️⃣ Carregar pedidos do usuário
+    // ================================
+    async function loadMyOrders() {
+      const token = getToken();
+      const container = document.getElementById("orders-list");
+
+      if (!token) {
+        container.innerHTML = `<p class="order-empty">Você precisa estar logado para ver seus pedidos.</p>`;
         return;
       }
 
-      const orders = await res.json();
+      await loadTickets(); // Importante
 
-      if (!orders.length) {
-        container.innerHTML = `<p class="order-empty">Você ainda não fez nenhum pedido.</p>`;
-        return;
+      try {
+        const res = await fetch("/api/orders", {
+          headers: { "Authorization": "Bearer " + token }
+        });
+
+        const orders = await res.json();
+
+        if (!orders.length) {
+          container.innerHTML = `<p class="order-empty">Você ainda não fez nenhum pedido.</p>`;
+          return;
+        }
+
+        container.innerHTML = "";
+
+        orders.forEach(o => {
+          let itensHTML = o.items.map(i => {
+            const ticket = TICKETS_CACHE[i.ticket_id];
+
+            if (!ticket) {
+              return `<div class="order-item">Ingresso desconhecido (ID: ${i.ticket_id})</div>`;
+            }
+
+            return `
+              <div class="order-item">
+                <span>${ticket.name} — ${i.qty}x</span>
+                <strong>R$ ${((ticket.price_cents + ticket.fee_cents) * i.qty / 100).toFixed(2).replace(".", ",")}</strong>
+              </div>
+            `;
+          }).join("");
+
+          container.innerHTML += `
+            <div class="order-row">
+              <div class="order-header">
+                <div>Pedido: <strong>${o.code}</strong></div>
+                <div>${new Date(o.created_at).toLocaleString("pt-BR")}</div>
+              </div>
+
+              ${itensHTML}
+
+              <div style="text-align:right;margin-top:10px;">
+                <strong>Total: R$ ${(o.total_cents / 100).toFixed(2).replace(".", ",")}</strong>
+              </div>
+            </div>
+          `;
+        });
+
+      } catch (err) {
+        console.error("Erro pedidos:", err);
+        container.innerHTML = `<p class="order-empty">Erro ao conectar ao servidor.</p>`;
       }
-
-      container.innerHTML = "";
-
-      orders.forEach(o => {
-        let itensHTML = o.items.map(i => {
-          let t = TICKETS_CACHE[i.ticket_id];
-
-          if (!t) {
-            return `<div class="order-item">Ingresso desconhecido (ID ${i.ticket_id})</div>`;
-          }
-
-          return `
-            <div class="order-item">
-              <span>${t.name} — ${i.qty}x</span>
-              <strong>R$ ${((t.price_cents * i.qty) / 100).toFixed(2).replace(".", ",")}</strong>
-            </div>`;
-        }).join("");
-
-        container.innerHTML += `
-          <div class="order-row">
-            <div class="order-header">
-              <div>Pedido: <strong>${o.code}</strong></div>
-              <div>${new Date(o.created_at).toLocaleString("pt-BR")}</div>
-            </div>
-
-            ${itensHTML}
-
-            <div style="text-align:right;margin-top:10px;">
-              <strong>Total: R$ ${(o.total_cents / 100).toFixed(2).replace(".", ",")}</strong>
-            </div>
-          </div>`;
-      });
-
-    } catch (err) {
-      console.error("Erro:", err);
-      container.innerHTML = `<p class="order-empty">Erro ao conectar ao servidor.</p>`;
     }
-  }
 
-  document.addEventListener("DOMContentLoaded", loadMyOrders);
-</script>
-
-
+    document.addEventListener("DOMContentLoaded", loadMyOrders);
+  </script>
 
 </body>
 </html>

@@ -120,7 +120,7 @@
       "name": "INDIVIDUAL",
       "price_cents": 5000,
       "fee_cents": 500,
-      "stock": 100
+      "stock": 99
     },
     {
       "id": 3,
@@ -128,7 +128,7 @@
       "name": "INDIVIDUAL",
       "price_cents": 5000,
       "fee_cents": 500,
-      "stock": 100
+      "stock": 99
     },
     {
       "id": 4,
@@ -136,7 +136,7 @@
       "name": "INDIVIDUAL",
       "price_cents": 5000,
       "fee_cents": 500,
-      "stock": 99
+      "stock": 98
     },
     {
       "id": 5,
@@ -144,7 +144,7 @@
       "name": "INDIVIDUAL",
       "price_cents": 5000,
       "fee_cents": 500,
-      "stock": 100
+      "stock": 97
     },
     {
       "id": 6,
@@ -160,7 +160,7 @@
       "name": "INDIVIDUAL",
       "price_cents": 5000,
       "fee_cents": 500,
-      "stock": 100
+      "stock": 99
     },
     {
       "id": 8,
@@ -168,7 +168,7 @@
       "name": "INDIVIDUAL",
       "price_cents": 7000,
       "fee_cents": 700,
-      "stock": 100
+      "stock": 98
     },
     {
       "id": 9,
@@ -208,7 +208,7 @@
       "name": "INDIVIDUAL",
       "price_cents": 12000,
       "fee_cents": 1200,
-      "stock": 100
+      "stock": 99
     }
   ],
   "orders": [
@@ -279,6 +279,176 @@
       "status": "Concluído",
       "payment_method": "pix",
       "created_at": "2025-11-23T17:34:52.950Z"
+    },
+    {
+      "id": 5,
+      "user_id": 4,
+      "event_id": 2,
+      "event_title": "U-NITE CLASSIC",
+      "code": "PED465403",
+      "items": [
+        {
+          "ticket_id": 2,
+          "qty": 1
+        }
+      ],
+      "total_cents": 5500,
+      "status": "Concluído",
+      "payment_method": "pix",
+      "created_at": "2025-11-23T18:09:15.541Z"
+    },
+    {
+      "id": 6,
+      "user_id": 4,
+      "event_id": 13,
+      "event_title": "Bikini Memories",
+      "code": "PED534197",
+      "items": [
+        {
+          "ticket_id": 13,
+          "qty": 1
+        }
+      ],
+      "total_cents": 13200,
+      "status": "Concluído",
+      "payment_method": "pix",
+      "created_at": "2025-11-23T18:19:05.093Z"
+    },
+    {
+      "id": 7,
+      "user_id": 7,
+      "event_id": 3,
+      "event_title": "The After 2025",
+      "code": "PED365369",
+      "items": [
+        {
+          "ticket_id": 3,
+          "qty": 1
+        }
+      ],
+      "total_cents": 5500,
+      "status": "Concluído",
+      "payment_method": "pix",
+      "created_at": "2025-11-23T18:20:21.212Z"
+    },
+    {
+      "id": 8,
+      "user_id": 7,
+      "event_id": 4,
+      "event_title": "Sambinha 2025",
+      "code": "PED468308",
+      "items": [
+        {
+          "ticket_id": 4,
+          "qty": 1
+        }
+      ],
+      "total_cents": 5500,
+      "status": "Concluído",
+      "payment_method": "pix",
+      "created_at": "2025-11-23T18:24:57.880Z"
+    },
+    {
+      "id": 9,
+      "user_id": 7,
+      "event_id": 5,
+      "event_title": "Pagobinho 2025",
+      "code": "PED453265",
+      "items": [
+        {
+          "ticket_id": 5,
+          "qty": 1
+        }
+      ],
+      "total_cents": 5500,
+      "status": "Concluído",
+      "payment_method": "pix",
+      "created_at": "2025-11-23T18:32:00.855Z"
+    },
+    {
+      "id": 10,
+      "user_id": 7,
+      "event_id": 8,
+      "event_title": "Aina 2025",
+      "code": "PED756791",
+      "items": [
+        {
+          "ticket_id": 8,
+          "qty": 1
+        }
+      ],
+      "total_cents": 7700,
+      "status": "Concluído",
+      "payment_method": "pix",
+      "created_at": "2025-11-23T18:33:31.381Z"
+    },
+    {
+      "id": 11,
+      "user_id": 4,
+      "event_id": 5,
+      "event_title": "Pagobinho 2025",
+      "code": "PED384921",
+      "items": [
+        {
+          "ticket_id": 5,
+          "qty": 1
+        }
+      ],
+      "total_cents": 5500,
+      "status": "Concluído",
+      "payment_method": "pix",
+      "created_at": "2025-11-23T19:16:52.756Z"
+    },
+    {
+      "id": 12,
+      "user_id": 4,
+      "event_id": 8,
+      "event_title": "Aina 2025",
+      "code": "PED257388",
+      "items": [
+        {
+          "ticket_id": 8,
+          "qty": 1
+        }
+      ],
+      "total_cents": 7700,
+      "status": "Concluído",
+      "payment_method": "pix",
+      "created_at": "2025-11-23T19:17:23.496Z"
+    },
+    {
+      "id": 13,
+      "user_id": 4,
+      "event_id": 5,
+      "event_title": "Pagobinho 2025",
+      "code": "PED375023",
+      "items": [
+        {
+          "ticket_id": 5,
+          "qty": 1
+        }
+      ],
+      "total_cents": 5500,
+      "status": "Concluído",
+      "payment_method": "pix",
+      "created_at": "2025-11-23T19:30:26.606Z"
+    },
+    {
+      "id": 14,
+      "user_id": 8,
+      "event_id": 7,
+      "event_title": "Samba de Jorge",
+      "code": "PED157125",
+      "items": [
+        {
+          "ticket_id": 7,
+          "qty": 1
+        }
+      ],
+      "total_cents": 5500,
+      "status": "Concluído",
+      "payment_method": "boleto",
+      "created_at": "2025-11-23T19:32:36.725Z"
     }
   ],
   "users": [
@@ -308,7 +478,7 @@
       "name": "vla",
       "email": "vla@gmail.com",
       "password": "$2b$10$C6v9DQQ5BhUiR/aR1gOyNeJViweC9FM2RCA3UgODdCigMcG9Ws8Om",
-      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiZW1haWwiOiJ2bGFAZ21haWwuY29tIiwiaWF0IjoxNzYzOTE5MjgxLCJleHAiOjE3NjM5NDgwODF9.3X8iDobNl7Ob0WIeu47sjdbEMtKuKmK72v28E7dxgmg"
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiZW1haWwiOiJ2bGFAZ21haWwuY29tIiwiaWF0IjoxNzYzOTI1NDMzLCJleHAiOjE3NjM5NTQyMzN9.BTuUoSIaeq-kxV5Viz0k14mPQRrBA9rSmWqdfW-rPvo"
     },
     {
       "id": 5,
@@ -323,6 +493,20 @@
       "email": "final@gmail.com",
       "password": "$2b$10$zH7a.MgyJUrdyR2bHIpsKeRfT197erMYzEIi/TVix1No91yh0Obkm",
       "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiZW1haWwiOiJmaW5hbEBnbWFpbC5jb20iLCJpYXQiOjE3NjM4NTUyNTIsImV4cCI6MTc2Mzg4NDA1Mn0.1jxHBtkHuTUHnal8JF6FSGs9kySLgBHAaHIwezwF90I"
+    },
+    {
+      "id": 7,
+      "name": "vlad",
+      "email": "vladsilva@gmail.com",
+      "password": "$2b$10$7YqcICWsX9A6iEwGe5hUE.y3d9UB/TjNOfgEGocKuHddlmVC80UBy",
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NywiZW1haWwiOiJ2bGFkc2lsdmFAZ21haWwuY29tIiwiaWF0IjoxNzYzOTIyODAwLCJleHAiOjE3NjM5NTE2MDB9.tkj0q-gnjf1HC9IWjDD3k1C_1RZWDM8o90rdmGYJxgo"
+    },
+    {
+      "id": 8,
+      "name": "final",
+      "email": "final1@gmail.com",
+      "password": "$2b$10$elgZdY0xRljYBuL/HubkZ.z2uYhBhe/NaTbwg.VbShLXfN4VhIkZm",
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OCwiZW1haWwiOiJmaW5hbDFAZ21haWwuY29tIiwiaWF0IjoxNzYzOTI2MzMzLCJleHAiOjE3NjM5NTUxMzN9.wR3mQIYSg28EhcLP-4zll4qZPE_kyMxvyRVTGsjNT9k"
     }
   ],
   "help_requests": []

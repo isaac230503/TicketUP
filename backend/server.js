@@ -79,6 +79,12 @@ function ensureDataFile() {
 }
 
 ensureDataFile();
+// ======================================================
+// 🔄 SERVIR data.json PARA O FRONT
+// ======================================================
+app.get("/data.json", (req, res) => {
+  res.sendFile(path.join(__dirname, "data.json"));
+});
 
 const readData = () => JSON.parse(fs.readFileSync(DATA_PATH));
 const writeData = (data) => fs.writeFileSync(DATA_PATH, JSON.stringify(data, null, 2));
@@ -97,6 +103,12 @@ if (fs.existsSync(frontendDir)) {
     res.sendFile(path.join(frontendDir, "index.html"));
   });
 }
+// ======================================================
+// 📄 SERVIR data.json PARA O FRONTEND
+// ======================================================
+app.get("/data.json", (req, res) => {
+  res.sendFile(DATA_PATH);
+});
 
 // ======================================================
 // 🎟 EVENTOS
