@@ -2,11 +2,107 @@
   "events": [
     {
       "id": 1,
-      "title": "QUINTA NO GALO - NONO GERMANO E CONVIDADOS",
-      "date": "2025-11-06T19:00:00",
-      "venue": "SEDE DO GALO DA MADRUGADA - RECIFE-PE",
-      "image": "/assets/image-20.png",
-      "description": "Descrição do evento"
+      "title": "Expo gesso 2025",
+      "date": "2025-11-29T19:00:00",
+      "venue": "Trindade-PE",
+      "image": "/assets/gesso.png",
+      "description": "Evento Expo gesso 2025 em Trindade-PE"
+    },
+    {
+      "id": 2,
+      "title": "U-NITE CLASSIC",
+      "date": "2025-11-22T19:00:00",
+      "venue": "Olinda-PE",
+      "image": "/assets/image 14.png",
+      "description": "U-NITE CLASSIC em Olinda-PE"
+    },
+    {
+      "id": 3,
+      "title": "The After 2025",
+      "date": "2025-11-23T19:00:00",
+      "venue": "Trindade-PE",
+      "image": "/assets/after.png",
+      "description": "The After 2025 em Trindade-PE"
+    },
+    {
+      "id": 4,
+      "title": "Sambinha 2025",
+      "date": "2025-11-29T19:00:00",
+      "venue": "Caruaru-PE",
+      "image": "/assets/sambinha.png",
+      "description": "Sambinha 2025 em Caruaru-PE"
+    },
+    {
+      "id": 5,
+      "title": "Pagobinho 2025",
+      "date": "2025-11-22T19:00:00",
+      "venue": "Arcoverde-PE",
+      "image": "/assets/pagobinho.png",
+      "description": "Pagobinho 2025 em Arcoverde-PE"
+    },
+    {
+      "id": 6,
+      "title": "Paizão 2025",
+      "date": "2025-11-21T19:00:00",
+      "venue": "Bezerros-PE",
+      "image": "/assets/paizao.png",
+      "description": "Paizão 2025 em Bezerros-PE"
+    },
+    {
+      "id": 7,
+      "title": "Samba de Jorge",
+      "date": "2025-11-24T19:00:00",
+      "venue": "Recife-PE",
+      "image": "/assets/jorge.png",
+      "description": "Samba de Jorge em Recife-PE"
+    },
+    {
+      "id": 8,
+      "title": "Aina 2025",
+      "date": "2025-11-20T19:00:00",
+      "venue": "Recife-PE",
+      "image": "/assets/aina.png",
+      "description": "Aina 2025 em Recife-PE"
+    },
+    {
+      "id": 9,
+      "title": "Quinta no Galo",
+      "date": "2025-12-12T19:00:00",
+      "venue": "Olinda-PE",
+      "image": "/assets/galo.png",
+      "description": "Quinta no Galo em Olinda-PE"
+    },
+    {
+      "id": 10,
+      "title": "Jovem Guarda",
+      "date": "2025-12-15T19:00:00",
+      "venue": "Caruaru-PE",
+      "image": "/assets/guarda.png",
+      "description": "Jovem Guarda em Caruaru-PE"
+    },
+    {
+      "id": 11,
+      "title": "Geek Verse",
+      "date": "2025-12-18T19:00:00",
+      "venue": "Caruaru-PE",
+      "image": "/assets/image 17.png",
+      "description": "Geek Verse em Caruaru-PE"
+    },
+    {
+      "id": 12,
+      "title": "Forró Mulher",
+      "date": "2025-12-06T19:00:00",
+      "venue": "Recife-PE",
+      "image": "/assets/forromulher.png",
+      "description": "Forró Mulher em Recife-PE"
+    },
+    {
+      "id": 13,
+      "title": "Bikini Memories",
+      "date": "2025-11-20T19:00:00",
+      "venue": "Porto-PE",
+      "image": "/assets/bikini.png",
+      "description": "Bikini Memories em Porto-PE"
     }
   ],
   "tickets": [
@@ -20,22 +116,171 @@
     },
     {
       "id": 2,
-      "event_id": 1,
-      "name": "INDIVIDUAL - MEIA",
-      "price_cents": 2500,
-      "fee_cents": 250,
-      "stock": 50
+      "event_id": 2,
+      "name": "INDIVIDUAL",
+      "price_cents": 5000,
+      "fee_cents": 500,
+      "stock": 100
     },
     {
       "id": 3,
-      "event_id": 1,
-      "name": "MESA (4 PESSOAS)",
-      "price_cents": 25000,
-      "fee_cents": 2500,
-      "stock": 10
+      "event_id": 3,
+      "name": "INDIVIDUAL",
+      "price_cents": 5000,
+      "fee_cents": 500,
+      "stock": 100
+    },
+    {
+      "id": 4,
+      "event_id": 4,
+      "name": "INDIVIDUAL",
+      "price_cents": 5000,
+      "fee_cents": 500,
+      "stock": 99
+    },
+    {
+      "id": 5,
+      "event_id": 5,
+      "name": "INDIVIDUAL",
+      "price_cents": 5000,
+      "fee_cents": 500,
+      "stock": 100
+    },
+    {
+      "id": 6,
+      "event_id": 6,
+      "name": "INDIVIDUAL",
+      "price_cents": 5000,
+      "fee_cents": 500,
+      "stock": 100
+    },
+    {
+      "id": 7,
+      "event_id": 7,
+      "name": "INDIVIDUAL",
+      "price_cents": 5000,
+      "fee_cents": 500,
+      "stock": 100
+    },
+    {
+      "id": 8,
+      "event_id": 8,
+      "name": "INDIVIDUAL",
+      "price_cents": 7000,
+      "fee_cents": 700,
+      "stock": 100
+    },
+    {
+      "id": 9,
+      "event_id": 9,
+      "name": "INDIVIDUAL",
+      "price_cents": 6000,
+      "fee_cents": 600,
+      "stock": 99
+    },
+    {
+      "id": 10,
+      "event_id": 10,
+      "name": "INDIVIDUAL",
+      "price_cents": 8000,
+      "fee_cents": 800,
+      "stock": 100
+    },
+    {
+      "id": 11,
+      "event_id": 11,
+      "name": "INDIVIDUAL",
+      "price_cents": 4500,
+      "fee_cents": 450,
+      "stock": 100
+    },
+    {
+      "id": 12,
+      "event_id": 12,
+      "name": "INDIVIDUAL",
+      "price_cents": 6500,
+      "fee_cents": 650,
+      "stock": 99
+    },
+    {
+      "id": 13,
+      "event_id": 13,
+      "name": "INDIVIDUAL",
+      "price_cents": 12000,
+      "fee_cents": 1200,
+      "stock": 100
     }
   ],
-  "orders": [],
+  "orders": [
+    {
+      "id": 1,
+      "user_id": 4,
+      "event_id": 1,
+      "event_title": "QUINTA NO GALO - NONO GERMANO E CONVIDADOS",
+      "code": "PED992803",
+      "items": [
+        {
+          "ticket_id": 1,
+          "qty": 1
+        }
+      ],
+      "total_cents": 5500,
+      "status": "Concluído",
+      "payment_method": "pix",
+      "created_at": "2025-11-23T16:34:32.304Z"
+    },
+    {
+      "id": 2,
+      "user_id": 4,
+      "event_id": 4,
+      "event_title": "Sambinha 2025",
+      "code": "PED209338",
+      "items": [
+        {
+          "ticket_id": 4,
+          "qty": 1
+        }
+      ],
+      "total_cents": 5500,
+      "status": "Concluído",
+      "payment_method": "pix",
+      "created_at": "2025-11-23T17:02:35.000Z"
+    },
+    {
+      "id": 3,
+      "user_id": 4,
+      "event_id": 12,
+      "event_title": "Forró Mulher",
+      "code": "PED947894",
+      "items": [
+        {
+          "ticket_id": 12,
+          "qty": 1
+        }
+      ],
+      "total_cents": 7150,
+      "status": "Concluído",
+      "payment_method": "pix",
+      "created_at": "2025-11-23T17:12:18.936Z"
+    },
+    {
+      "id": 4,
+      "user_id": 4,
+      "event_id": 9,
+      "event_title": "Quinta no Galo",
+      "code": "PED120919",
+      "items": [
+        {
+          "ticket_id": 9,
+          "qty": 1
+        }
+      ],
+      "total_cents": 6600,
+      "status": "Concluído",
+      "payment_method": "pix",
+      "created_at": "2025-11-23T17:34:52.950Z"
+    }
+  ],
   "users": [
     {
       "id": 1,
@@ -50,6 +295,34 @@
       "email": "ddd@gmail.com",
       "password": "$2b$10$G44FIAQFyC1qVhV.CqLWpODn6s44xTwbvETLg.veZeusKibSZCAO2",
       "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZW1haWwiOiJkZGRAZ21haWwuY29tIiwiaWF0IjoxNzYzODQwMTY4LCJleHAiOjE3NjM4Njg5Njh9.kU6xLIHT8_8Ps4tOERR1E0_nWPRQ0IDWK23fHNRZDeg"
+    },
+    {
+      "id": 3,
+      "name": "casa",
+      "email": "casa@gmail.com",
+      "password": "$2b$10$8gZiGj97shgGjT/05JGcWe5ap6SwqGx9lsKT1XKegPUOd0slXPode",
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiZW1haWwiOiJjYXNhQGdtYWlsLmNvbSIsImlhdCI6MTc2Mzg0NDQ2MSwiZXhwIjoxNzYzODczMjYxfQ.lC_NhKpKjuw5Ar93uNk2KlZ2idLAqZwFYP8Gb-cD7pg"
+    },
+    {
+      "id": 4,
+      "name": "vla",
+      "email": "vla@gmail.com",
+      "password": "$2b$10$C6v9DQQ5BhUiR/aR1gOyNeJViweC9FM2RCA3UgODdCigMcG9Ws8Om",
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiZW1haWwiOiJ2bGFAZ21haWwuY29tIiwiaWF0IjoxNzYzOTE5MjgxLCJleHAiOjE3NjM5NDgwODF9.3X8iDobNl7Ob0WIeu47sjdbEMtKuKmK72v28E7dxgmg"
+    },
+    {
+      "id": 5,
+      "name": "tik",
+      "email": "tik@gmail.com",
+      "password": "$2b$10$9xK/dk6X69Sxh2SBh5tY5OK.GcfLS3DSxO7O2yjqsfiWUgV2QkJNy",
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiZW1haWwiOiJ0aWtAZ21haWwuY29tIiwiaWF0IjoxNzYzODQ5MTU5LCJleHAiOjE3NjM4Nzc5NTl9.CwKMdZZGIvuS6N51JDVesu_PO8aos8Ysnnhw7MKH-Pw"
+    },
+    {
+      "id": 6,
+      "name": "final",
+      "email": "final@gmail.com",
+      "password": "$2b$10$zH7a.MgyJUrdyR2bHIpsKeRfT197erMYzEIi/TVix1No91yh0Obkm",
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NiwiZW1haWwiOiJmaW5hbEBnbWFpbC5jb20iLCJpYXQiOjE3NjM4NTUyNTIsImV4cCI6MTc2Mzg4NDA1Mn0.1jxHBtkHuTUHnal8JF6FSGs9kySLgBHAaHIwezwF90I"
     }
   ],
   "help_requests": []

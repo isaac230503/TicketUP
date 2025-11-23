@@ -5,65 +5,174 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>TicketUP — Meus Pedidos</title>
   <link rel="stylesheet" href="index.css">
+
   <style>
-    /* estilos mínimos para a lista de pedidos */
-    .orders-list { max-width:1100px; margin:24px auto; padding:0 12px; }
-    .order-row { display:grid; grid-template-columns:120px 160px 1fr 120px 120px 80px; gap:8px; align-items:center;
-                 padding:12px 8px; border-bottom:1px solid rgba(0,0,0,0.06); }
-    .order-row .col { font-size:14px; color:#111; }
-    .order-empty { text-align:center; padding:36px; color:#666; }
-    .btn.small { padding:6px 8px; border-radius:6px; background:#e0ff00; color:#000; border:0; cursor:pointer; }
+    .orders-list { 
+      max-width:1100px; 
+      margin:24px auto; 
+      padding:0 12px;
+    }
+
+    .order-row {
+      background:#fff;
+      padding:16px;
+      margin-bottom:12px;
+      border-radius:8px;
+      border:1px solid #ddd;
+    }
+
+    .order-header {
+      display:flex;
+      justify-content:space-between;
+      margin-bottom:10px;
+      font-weight:600;
+    }
+
+    .order-item {
+      display:flex;
+      justify-content:space-between;
+      padding:4px 0;
+      border-bottom:1px solid #eee;
+      font-size:14px;
+    }
+
+    .order-empty {
+      text-align:center;
+      padding:36px;
+      color:#666;
+      font-size:16px;
+    }
   </style>
 </head>
 <body>
+
   <header class="topbar">
     <div class="topbar-inner container">
-      <div class="logo"><a href="index.html"><img src="../assets/logo.png" alt="TicketUP"></a></div>
+
+      <a href="index.html">
+        <img src="../assets/logo.png" alt="TicketUP" style="height:48px">
+      </a>
+
       <nav class="toplinks">
         <a href="index.html">Início</a>
         <a href="ajuda.html">Central de Ajuda</a>
       </nav>
+
     </div>
   </header>
 
   <main>
     <h1 style="max-width:1100px;margin:24px auto;padding:0 12px;">Meus Pedidos</h1>
-    <section class="orders-list">
-      <!-- carrinho.js irá preencher aqui -->
-    </section>
 
-    <div style="max-width:1100px;margin:24px auto;padding:0 12px;">
-      <button id="create-test-order" class="btn small">Criar pedido de exemplo (para testes)</button>
-    </div>
+    <section id="orders-list" class="orders-list"></section>
   </main>
 
   <footer style="margin-top:40px;padding:20px;text-align:center;color:#999;">
-    © 2025 TicketUP — Todos os direitos reservados.
+    © 2025 TicketUP — Todos os direitos reservados
   </footer>
 
-  <script src="carrinho.js"></script>
-   <script src="../assets/auth-guard.js"></script>
- <script src="auth.js"></script>
-<script>
-  requireAuth();
+  <script>
+  // ===============================
+  // 📌 Obter token
+  // ===============================
+  function getToken() {
+    return localStorage.getItem("token");
+  }
+
+  let TICKETS_CACHE = {};
+
+  // ===============================
+  // 📌 Carregar tickets do data.json
+  // ===============================
+  async function loadTickets() {
+    try {
+      const res = await fetch("/data.json");
+      const json = await res.json();
+      json.tickets.forEach(t => {
+        TICKETS_CACHE[t.id] = t;
+      });
+    } catch (e) {
+      console.warn("Erro carregando tickets:", e);
+    }
+  }
+
+  // ===============================
+  // 📌 Carregar pedidos do usuário
+  // ===============================
+  async function loadMyOrders() {
+    const token = getToken();
+    const container = document.querySelector(".orders-list");
+
+    if (!container) return;
+
+    if (!token) {
+      container.innerHTML = `
+        <p class="order-empty">Você precisa estar logado para ver seus pedidos.</p>
+      `;
+      return;
+    }
+
+    await loadTickets();
+
+    try {
+      const res = await fetch("/api/orders", {
+        headers: { "Authorization": "Bearer " + token }
+      });
+
+      if (!res.ok) {
+        container.innerHTML = `<p class="order-empty">❌ Erro ao carregar pedidos.</p>`;
+        return;
+      }
+
+      const orders = await res.json();
+
+      if (!orders.length) {
+        container.innerHTML = `<p class="order-empty">Você ainda não fez nenhum pedido.</p>`;
+        return;
+      }
+
+      container.innerHTML = "";
+
+      orders.forEach(o => {
+        let itensHTML = o.items.map(i => {
+          let t = TICKETS_CACHE[i.ticket_id];
+
+          if (!t) {
+            return `<div class="order-item">Ingresso desconhecido (ID ${i.ticket_id})</div>`;
+          }
+
+          return `
+            <div class="order-item">
+              <span>${t.name} — ${i.qty}x</span>
+              <strong>R$ ${((t.price_cents * i.qty) / 100).toFixed(2).replace(".", ",")}</strong>
+            </div>`;
+        }).join("");
+
+        container.innerHTML += `
+          <div class="order-row">
+            <div class="order-header">
+              <div>Pedido: <strong>${o.code}</strong></div>
+              <div>${new Date(o.created_at).toLocaleString("pt-BR")}</div>
+            </div>
+
+            ${itensHTML}
+
+            <div style="text-align:right;margin-top:10px;">
+              <strong>Total: R$ ${(o.total_cents / 100).toFixed(2).replace(".", ",")}</strong>
+            </div>
+          </div>`;
+      });
+
+    } catch (err) {
+      console.error("Erro:", err);
+      container.innerHTML = `<p class="order-empty">Erro ao conectar ao servidor.</p>`;
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", loadMyOrders);
 </script>
 
-<script>
-    protegerPagina();
-</script>
- <script>
-    // botão de teste: cria um pedido a partir do carrinho atual
-    document.getElementById('create-test-order').addEventListener('click', () => {
-      const pedido = createOrderFromCart({ payment_method: 'Cartão', status: 'Concluído' });
-      if (pedido) alert('Pedido criado: ' + pedido.code);
-      else alert('Carrinho vazio');
-    });
-  </script>
-  <script src="auth.js"></script>
-<script>
-    requireAuth();
-</script>
 
-  
+
 </body>
 </html>

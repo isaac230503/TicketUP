@@ -1,344 +1,333 @@
 'use strict';
 
 const express = require('express');
+const auth = require("./middleware/auth");
 const fs = require('fs');
 const path = require('path');
 const cors = require('cors');
-const crypto = require('crypto');
 require("dotenv").config();
 
-const PORT = process.env.PORT || 3000;
-
-// === Segurança ===
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
+const compression = require("compression");
 const rateLimit = require("express-rate-limit");
 const helmet = require("helmet");
 const { check, validationResult } = require("express-validator");
 const cookieParser = require("cookie-parser");
 
-const app = express();      
-app.use(cookieParser());    
-        // 2º usa o cookieParser
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
+const app = express();
+const PORT = process.env.PORT || 3000;
 
-// JWT secret (defina em .env como JWT_SECRET)
-const JWT_SECRET = process.env.JWT_SECRET || 'changeme_jwt_secret';
-
-// === Middlewares globais ===
-// 🚨 NÃO REPETIR ESTES TRÊS NUNCA MAIS!
+// ======================================================
+// 🔐 SEGURANÇA GLOBAL
+// ======================================================
 app.use(express.json());
-app.use(cors());
-app.use(helmet());
+app.use(cookieParser());
+app.use(compression());
 
-// Rate limit para login
+app.use(cors({
+  origin: "http://localhost:3000",
+  methods: "GET,POST,PUT,DELETE",
+  credentials: true
+}));
+
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: ["'self'", "'unsafe-inline'"],
+        styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
+        fontSrc: ["'self'", "https://fonts.gstatic.com"],
+        imgSrc: ["'self'", "data:", "blob:"]
+      }
+    }
+  })
+);
+
+// RATE LIMIT
 const loginLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 5,
-  message: "Muitas tentativas de login. Tente novamente mais tarde."
+  max: 6,
+  message: "Muitas tentativas de login. Tente novamente em alguns minutos."
 });
 
-// Carregar rotas de usuário
-let usuarioRoutes;
-try {
-  usuarioRoutes = require('./routes/usuario');
-  app.use("/usuarios", usuarioRoutes);
-} catch (e) {
-  console.error('Erro ao carregar rota /usuarios:', e?.message || e);
-}
+const registerLimiter = rateLimit({
+  windowMs: 30 * 60 * 1000,
+  max: 10,
+  message: "Muitas tentativas de registro."
+});
 
-// Caminho dos dados locais (fallback)
-const DATA_PATH = path.join(__dirname, 'data.json');
+const JWT_SECRET = process.env.JWT_SECRET || "changeme_jwt_secret";
+
+// ======================================================
+// 📁 BANCO EM data.json
+// ======================================================
+const DATA_PATH = path.join(__dirname, "data.json");
 
 function ensureDataFile() {
-  const defaultData = {
-    events: [
-      {
-        id: 1,
-        title: "QUINTA NO GALO - NONO GERMANO E CONVIDADOS",
-        date: "2025-11-06T19:00:00",
-        venue: "SEDE DO GALO DA MADRUGADA - RECIFE-PE",
-        image: "/assets/image-20.png",
-        description: "Descrição do evento"
-      }
-    ],
-    tickets: [
-      { id: 1, event_id: 1, name: "INDIVIDUAL", price_cents: 5000, fee_cents: 500, stock: 100 },
-      { id: 2, event_id: 1, name: "INDIVIDUAL - MEIA", price_cents: 2500, fee_cents: 250, stock: 50 },
-      { id: 3, event_id: 1, name: "MESA (4 PESSOAS)", price_cents: 25000, fee_cents: 2500, stock: 10 }
-    ],
-    orders: [],
-    users: [],
-    help_requests: []
-  };
-
   if (!fs.existsSync(DATA_PATH)) {
-    fs.writeFileSync(DATA_PATH, JSON.stringify(defaultData, null, 2));
-    return;
-  }
-
-  try {
-    JSON.parse(fs.readFileSync(DATA_PATH, 'utf8'));
-  } catch (err) {
-    const bak = DATA_PATH + '.bak.' + Date.now();
-    fs.copyFileSync(DATA_PATH, bak);
-    console.warn(`data.json inválido. Backup criado em ${bak}. Recriando data.json com valores padrão.`);
-    fs.writeFileSync(DATA_PATH, JSON.stringify(defaultData, null, 2));
+    fs.writeFileSync(DATA_PATH, JSON.stringify({
+      events: [],
+      tickets: [],
+      orders: [],
+      users: [],
+      help_requests: []
+    }, null, 2));
   }
 }
 
 ensureDataFile();
 
-const readData = () => JSON.parse(fs.readFileSync(DATA_PATH, 'utf8'));
+const readData = () => JSON.parse(fs.readFileSync(DATA_PATH));
 const writeData = (data) => fs.writeFileSync(DATA_PATH, JSON.stringify(data, null, 2));
 
-// if testeRoute exists, register it (preserve existing behavior)
-try {
-  const testeRoute = require('./routes/teste');
-  app.use('/teste', testeRoute);
-} catch (e) {
-  // não obrigatório
-}
+// ======================================================
+// 🌐 SERVE FRONTEND
+// ======================================================
+const assetsDir = path.join(__dirname, "..", "frontend", "assets");
+if (fs.existsSync(assetsDir)) app.use("/assets", express.static(assetsDir));
 
-// servir assets do frontend (se existir)
-const assetsDir = path.join(__dirname, '..', 'frontend', 'assets');
-if (fs.existsSync(assetsDir)) app.use('/assets', express.static(assetsDir));
-
-// ===== Novo: servir frontend e rota raiz =====
-const frontendDir = path.join(__dirname, '..', 'frontend', 'html e css'); // path com espaços OK
+const frontendDir = path.join(__dirname, "..", "frontend", "html e css");
 if (fs.existsSync(frontendDir)) {
-  app.use(express.static(frontendDir)); // serve arquivos estáticos (html, css, js)
+  app.use(express.static(frontendDir));
 
-  // ===== Novo: também responder em /html para compatibilidade com links que usam /html/xxx =====
-  app.use('/html', express.static(frontendDir));
-  app.get('/', (req, res) => {
-    const indexFile = path.join(frontendDir, 'index.html');
-    if (fs.existsSync(indexFile)) return res.sendFile(indexFile);
-    return res.send('API funcionando — visite /api/events para testar');
+  app.get("/", (req, res) => {
+    res.sendFile(path.join(frontendDir, "index.html"));
   });
 }
-// ===== fim do trecho novo =====
 
-// rotas
-app.get('/api/events', async (req, res) => {
-  // Se existir configuração de DB (arquivo backend/db.js), usa PostgreSQL.
-  if (typeof require === 'function') {
-    try {
-      const db = require('./db');
-      // mapeia EVENTO -> formato esperado pelo frontend
-      const q = `SELECT id_evento, data_horario_inicio, endereco, nome, descricao
-                 FROM evento
-                 ORDER BY data_horario_inicio`;
-      const result = await db.query(q);
-      const events = result.rows.map(r => ({
-        id: r.id_evento,
-        title: r.nome,
-        date: r.data_horario_inicio,
-        venue: r.endereco,
-        image: null,
-        description: r.descricao
-      }));
-      return res.json(events);
-    } catch (err) {
-      // não conseguiu usar DB — cairá para o fallback em data.json
-      console.log('Postgres não disponível ou erro ao consultar eventos:', err.message || err);
-    }
-  }
+// ======================================================
+// 🎟 EVENTOS
+// ======================================================
+app.get("/api/events", (req, res) => {
   const data = readData();
   res.json(data.events);
 });
 
-app.get('/api/events/:id', async (req, res) => {
-  const id = Number(req.params.id);
-  if (typeof require === 'function') {
-    try {
-      const db = require('./db');
-      // Buscar evento
-      const evQ = 'SELECT id_evento, data_horario_inicio, endereco, nome, descricao FROM evento WHERE id_evento = $1';
-      const evRes = await db.query(evQ, [id]);
-      if (evRes.rowCount === 0) return res.status(404).json({ error: 'Evento não encontrado' });
-      const r = evRes.rows[0];
-      // Buscar ingressos relacionados (join via setor)
-      const tkQ = `SELECT t.id_tipo_ingresso AS id, t.nome AS name, (t.preco_final * 100)::bigint AS price_cents,
-                          (t.taxa_servico * 100)::bigint AS fee_cents,
-                          COALESCE(ei.quantidade_total - ei.quantidade_vendida, 0) AS stock
-                   FROM tipo_ingresso t
-                   JOIN setor s ON t.id_setor = s.id_setor
-                   LEFT JOIN estoque_ingresso ei ON ei.id_tipo_ingresso = t.id_tipo_ingresso
-                   WHERE s.id_evento = $1`;
-      const tkRes = await db.query(tkQ, [id]);
-      const event = {
-        id: r.id_evento,
-        title: r.nome,
-        date: r.data_horario_inicio,
-        venue: r.endereco,
-        image: null,
-        description: r.descricao
-      };
-      const tickets = tkRes.rows.map(t => ({ id: t.id, event_id: id, name: t.name, price_cents: Number(t.price_cents || 0), fee_cents: Number(t.fee_cents || 0), stock: Number(t.stock || 0) }));
-      return res.json({ ...event, tickets });
-    } catch (err) {
-      console.log('Postgres não disponível ou erro em /api/events/:id:', err.message || err);
-    }
-  }
+app.get("/api/events/:id", (req, res) => {
   const data = readData();
+  const id = Number(req.params.id);
+
   const event = data.events.find(e => e.id === id);
-  if (!event) return res.status(404).json({ error: 'Evento não encontrado' });
+  if (!event) return res.status(404).json({ error: "Evento não encontrado" });
+
   const tickets = data.tickets.filter(t => t.event_id === id);
   res.json({ ...event, tickets });
 });
 
-app.post('/api/orders', (req, res) => {
+// ======================================================
+// 🛒 CRIAR PEDIDO
+// ======================================================
+app.post("/api/orders", auth, (req, res) => {
   try {
-    const { event_id, items } = req.body;
-    if (!event_id || !Array.isArray(items) || items.length === 0)
-      return res.status(400).json({ error: 'Payload inválido' });
+    const { event_id, items, payment_method } = req.body;
+
+    if (!event_id || !Array.isArray(items) || items.length === 0) {
+      return res.status(400).json({ error: "Payload inválido" });
+    }
 
     const data = readData();
     let total = 0;
+
+    // calcula total + baixa estoque
     for (const it of items) {
       const t = data.tickets.find(x => x.id === it.ticket_id && x.event_id === event_id);
       if (!t) return res.status(400).json({ error: `Ingresso inválido: ${it.ticket_id}` });
       if (t.stock < it.qty) return res.status(400).json({ error: `Sem estoque para ${t.name}` });
+
       total += (t.price_cents + (t.fee_cents || 0)) * it.qty;
+      t.stock -= it.qty;
     }
 
-    // decrementar estoque
-    for (const it of items) {
-      const idx = data.tickets.findIndex(x => x.id === it.ticket_id);
-      data.tickets[idx].stock -= it.qty;
-    }
+    const id = (data.orders.reduce((m, o) => Math.max(m, o.id), 0) || 0) + 1;
 
-    const nextId = (data.orders.reduce((m, o) => Math.max(m, o.id || 0), 0) || 0) + 1;
-    const order = { id: nextId, event_id, items, total_cents: total, status: 'pending', created_at: new Date().toISOString() };
+    const order = {
+      id,
+      user_id: req.user.id,
+      event_id,
+      event_title: data.events.find(e => e.id === event_id)?.title || "Evento",
+      code: "PED" + Math.floor(100000 + Math.random() * 900000),
+      items,
+      total_cents: total,
+      status: "Concluído",
+      payment_method: payment_method || "pix",
+      created_at: new Date().toISOString()
+    };
+
     data.orders.push(order);
     writeData(data);
+
     res.status(201).json(order);
+
   } catch (err) {
-    console.error('Erro em /api/orders:', err);
-    res.status(500).json({ error: 'Erro interno' });
+    console.error("Erro:", err);
+    res.status(500).json({ error: "Erro ao criar pedido" });
   }
 });
 
-app.get('/api/orders/:id', (req, res) => {
-  const id = Number(req.params.id);
-  const data = readData();
-  const order = data.orders.find(o => o.id === id);
-  if (!order) return res.status(404).json({ error: 'Pedido não encontrado' });
-  res.json(order);
-});
-
-// ===== Adição: auth simples and help requests =====
-function findUserByToken(token){
-  const data = readData();
-  return data.users.find(u => u.token === token);
-}
-
-app.post('/api/auth/register', async (req, res) => {
-  const { name, email, password } = req.body || {};
-  console.log('POST /api/auth/register payload:', { name, email: (email||'').slice(0,40), hasPassword: !!password });
-  if (!name || !email || !password) return res.status(400).json({ error: 'Dados insuficientes' });
-
-  const data = readData();
-  if (data.users.find(u => u.email === email)) return res.status(400).json({ error: 'Email já cadastrado' });
-
-  const id = (data.users.reduce((m,u)=>Math.max(m,u.id||0),0) || 0) + 1;
-
-  // HASH da senha (segurança)
-  const hashedPassword = await bcrypt.hash(password, 10);
-
-  // gerar token JWT
-  const token = jwt.sign({ id, email }, JWT_SECRET, { expiresIn: '8h' });
-
-  const user = { id, name, email, password: hashedPassword, token };
-  data.users.push(user);
+// ======================================================
+// 📄 LISTAR PEDIDOS DO USUÁRIO
+// ======================================================
+app.get("/api/orders", auth, (req, res) => {
   try {
-    writeData(data);
-  } catch (e) {
-    console.error('Falha ao escrever data.json:', e && e.message ? e.message : e);
-    return res.status(500).json({ error: 'Erro ao salvar usuário' });
+    const data = readData();
+    const orders = data.orders.filter(o => o.user_id === req.user.id);
+    res.json(orders);
+  } catch (err) {
+    res.status(500).json({ error: "Erro ao carregar pedidos" });
   }
-  console.log('Usuário registrado:', { id, name, email });
-  // não retornar a senha
-  return res.status(201).json({ id, name, email, token });
 });
 
-app.post("/api/auth/login", loginLimiter, async (req, res) => {
-  const { email, password } = req.body || {};
-  if (!email || !password) return res.status(400).json({ error: 'Email e senha são obrigatórios' });
+// ======================================================
+// 🔐 REGISTRO
+// ======================================================
+app.post(
+  "/api/auth/register",
+  registerLimiter,
+  [
+    check("name").trim().isLength({ min: 2 }).withMessage("Nome inválido"),
+    check("email").isEmail().withMessage("Email inválido"),
+    check("password").isLength({ min: 6 }).withMessage("Senha deve ter no mínimo 6 caracteres")
+  ],
+  async (req, res) => {
 
-  const data = readData();
-  const user = data.users.find(u => u.email === email);
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) return res.status(400).json({ error: errors.array()[0].msg });
 
-  // registrar tentativa de login no Postgres (se disponível) — não bloquear por falha
-  try {
-    if (typeof require === 'function') {
-      try {
-        const db = require('./db');
-        await db.query(
-          'INSERT INTO login_attempt (email, success, ip_address, user_agent) VALUES ($1,$2,$3,$4)',
-          [email, !!user, req.ip || null, req.get('User-Agent') || null]
-        );
-      } catch (e) {
-        // erro ao gravar no DB — apenas logamos no console
-        console.error('Falha ao gravar login_attempt no DB:', e && e.message ? e.message : e);
-      }
+    const { name, email, password } = req.body;
+    const data = readData();
+
+    if (data.users.some(u => u.email === email)) {
+      return res.status(400).json({ error: "Email já cadastrado" });
     }
-  } catch (e) {
-    console.error('Erro inesperado ao tentar logar tentativa:', e && e.message ? e.message : e);
+
+    const id = (data.users.reduce((m, u) => Math.max(m, u.id), 0) || 0) + 1;
+    const hashed = await bcrypt.hash(password, 10);
+
+    const token = jwt.sign({ id, email }, JWT_SECRET, { expiresIn: "8h" });
+
+    data.users.push({ id, name, email, password: hashed, token });
+    writeData(data);
+
+    res.status(201).json({ id, name, email, token });
   }
+);
 
-  // verificar user e senha (com bcrypt)
-  if (!user) return res.status(401).json({ error: 'Credenciais inválidas' });
-  const match = await bcrypt.compare(password, user.password);
-  if (!match) return res.status(401).json({ error: 'Credenciais inválidas' });
+// ======================================================
+// 🔐 LOGIN
+// ======================================================
+app.post(
+  "/api/auth/login",
+  loginLimiter,
+  [
+    check("email").isEmail().withMessage("Email inválido"),
+    check("password").exists().withMessage("Senha obrigatória")
+  ],
+  async (req, res) => {
 
-  // renova token JWT
-  const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, { expiresIn: '8h' });
-  user.token = token;
-  writeData(data);
-  return res.json({ id: user.id, name: user.name, email: user.email, token: user.token });
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) return res.status(400).json({ error: errors.array()[0].msg });
+
+    const { email, password } = req.body;
+    const data = readData();
+
+    const user = data.users.find(u => u.email === email);
+    if (!user) return res.status(401).json({ error: "Credenciais inválidas" });
+
+    const match = await bcrypt.compare(password, user.password);
+    if (!match) return res.status(401).json({ error: "Credenciais inválidas" });
+
+    const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, { expiresIn: "8h" });
+    user.token = token;
+
+    writeData(data);
+
+    res.json({ id: user.id, name: user.name, email: user.email, token });
+  }
+);
+
+// ======================================================
+// 👤 /api/me
+// ======================================================
+app.get('/api/me', auth, (req, res) => {
+  res.json({
+    id: req.user.id,
+    name: req.user.name,
+    email: req.user.email
+  });
 });
-
-app.get('/api/me', (req, res) => {
-  const auth = (req.headers.authorization || '').replace('Bearer ', '');
-  if (!auth) return res.status(401).json({ error: 'Sem autorização' });
-  // tentar verificar JWT (se for válido)
-  try {
-    jwt.verify(auth, JWT_SECRET);
-  } catch (e) {
-    return res.status(401).json({ error: 'Token inválido' });
-  }
-  const user = findUserByToken(auth);
-  if (!user) return res.status(401).json({ error: 'Token inválido' });
-  return res.json({ id: user.id, name: user.name, email: user.email });
-});
-
-// rota para enviar solicitação de ajuda (autenticada)
-app.post('/api/help/requests', (req, res) => {
-  const auth = (req.headers.authorization || '').replace('Bearer ', '');
-  if (!auth) return res.status(401).json({ error: 'Sem autorização' });
-  try {
-    jwt.verify(auth, JWT_SECRET);
-  } catch (e) {
-    return res.status(401).json({ error: 'Token inválido' });
-  }
-  const user = findUserByToken(auth);
-  if (!user) return res.status(401).json({ error: 'Token inválido' });
-  const { subject, message } = req.body || {};
-  if (!subject || !message) return res.status(400).json({ error: 'Campos obrigatórios' });
-  
+// ======================================
+// 🔒 LOGOUT SEGURO — INVALIDA TOKEN
+// ======================================
+app.post("/api/auth/logout", auth, (req, res) => {
   const data = readData();
-  const id = (data.help_requests.reduce((m,r)=>Math.max(m,r.id||0),0) || 0) + 1;
-  const reqObj = {
-    id, user_id: user.id, subject, message, status: 'open', created_at: new Date().toISOString()
-  };
-  data.help_requests.push(reqObj);
-  writeData(data);
-  return res.status(201).json(reqObj);
-});
-// ===== fim das rotas novas =====
 
+  // remove token do usuário no banco
+  const user = data.users.find(u => u.id === req.user.id);
+  if (user) {
+    user.token = null; // invalida
+    writeData(data);
+  }
+
+  res.json({ success: true, message: "Logout realizado com segurança." });
+});
+
+// ======================================
+// 🆘 CENTRAL DE AJUDA — SEGURO
+// ======================================
+app.post(
+  "/api/help",
+  [
+    check("name").trim().isLength({ min: 2 }).withMessage("Nome inválido"),
+    check("email").isEmail().withMessage("Email inválido"),
+    check("subject").trim().isLength({ min: 3 }).withMessage("Assunto inválido"),
+    check("message").trim().isLength({ min: 10 }).withMessage("Mensagem muito curta")
+  ],
+  (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ error: errors.array()[0].msg });
+    }
+
+    const { name, email, subject, message } = req.body;
+
+    // sanitize manual contra XSS
+    function sanitize(text) {
+      return text
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+    }
+
+    const safeData = {
+      id: crypto.randomUUID(),
+      name: sanitize(name),
+      email: sanitize(email),
+      subject: sanitize(subject),
+      message: sanitize(message),
+      created_at: new Date().toISOString()
+    };
+
+    const data = readData();
+    data.help_requests.push(safeData);
+    writeData(data);
+
+    res.json({ success: true, message: "Solicitação enviada com segurança." });
+  }
+);
+
+// ======================================================
+// 🚨 ERRO GLOBAL
+// ======================================================
+app.use((err, req, res, next) => {
+  console.error("Erro interno:", err);
+  res.status(500).json({ error: "Erro interno do servidor" });
+});
+
+// ======================================================
+// ▶️ INICIAR SERVIDOR
+// ======================================================
 app.listen(PORT, () => {
-  console.log(`API rodando em http://localhost:${PORT}`);
+  console.log(`🚀 API rodando em http://localhost:${PORT}`);
 });

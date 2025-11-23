@@ -31,7 +31,8 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
-      // Guardar o usuário no navegador (com token)
+      // 🔥 Salvar token corretamente
+      localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify(data));
 
       alert("Login realizado com sucesso!");

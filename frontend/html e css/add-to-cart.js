@@ -11,15 +11,25 @@ function updateCartCount(){
 
 function addItemFromButton(btn){
   const item = {
-    ticket_id: Number(btn.dataset.ticketId || btn.getAttribute('data-ticket-id') || 0),
-    event_name: btn.dataset.eventName || btn.getAttribute('data-event-name') || btn.dataset.title || btn.getAttribute('data-title') || '',
-    title: btn.dataset.title || btn.getAttribute('data-title') || 'Ingresso',
-    description: btn.dataset.description || btn.getAttribute('data-description') || '',
-    price_cents: Number(btn.dataset.priceCents || btn.getAttribute('data-price-cents') || 0),
-    qty: 1,
-    image: btn.dataset.image || btn.getAttribute('data-image') || '../assets/placeholder.png', // garante imagem
-    venue: btn.dataset.venue || btn.getAttribute('data-venue') || ''
-  };
+  event_id: Number(btn.dataset.eventId || btn.getAttribute('data-event-id') || 0),
+  event_title: btn.dataset.title || btn.getAttribute('data-title') || '',
+  
+  ticket_id: Number(btn.dataset.ticketId || btn.getAttribute('data-ticket-id') || 0),
+
+  title: btn.dataset.title || btn.getAttribute('data-title') || 'Ingresso',
+  description: btn.dataset.description || btn.getAttribute('data-description') || '',
+
+  price_cents: Number(btn.dataset.priceCents || btn.getAttribute('data-price-cents') || 0),
+  fee_cents: Number(btn.dataset.feeCents || btn.getAttribute('data-fee-cents') || 0),
+
+  qty: 1,
+
+  image: btn.dataset.image || btn.getAttribute('data-image') || '../assets/placeholder.png',
+  venue: btn.dataset.venue || btn.getAttribute('data-venue') || ''
+};
+
+
+
   const cart = loadCart();
   const found = cart.find(i => i.ticket_id === item.ticket_id && i.title === item.title);
   if (found) found.qty += 1; else cart.push(item);

@@ -376,7 +376,7 @@
   </footer>
 
 
-  <script src="cart.js"></script>
+  
   <script src="add-to-cart.js"></script>
   <script src="compra.js"></script>
   <script src="upcoming.js"></script>
@@ -384,6 +384,180 @@
 <script src="register.js"></script>
 <script>
     requireAuth();
+
+</script>
+<!-- =============================== -->
+<!-- 🔧 Redirecionamento correto do Carrinho -->
+<!-- =============================== -->
+<script>
+
+document.addEventListener("DOMContentLoaded", () => {
+  const cartLink = document.querySelector(".cart-link");
+  const cartCount = document.querySelector(".cart-count");
+
+  if (!cartLink) return;
+
+  let raw = localStorage.getItem("ticketup_cart");
+
+  if (!raw) {
+    cartLink.addEventListener("click", (e) => {
+      e.preventDefault();
+      window.location.href = "compra.html";
+    });
+    return;
+  }
+
+  let cart = JSON.parse(raw || "[]");
+
+  if (!Array.isArray(cart) || cart.length === 0) {
+    cartLink.addEventListener("click", (e) => {
+      e.preventDefault();
+      window.location.href = "compra.html";
+    });
+    return;
+  }
+
+  if (cartCount) cartCount.textContent = cart.length;
+
+  const eventId = cart[0].event_id;
+
+  // 🔥 EVITA abrir compra.html sem id
+  cartLink.addEventListener("click", (e) => {
+    e.preventDefault();
+    if (eventId) {
+      window.location.href = `compra.html?id=${eventId}`;
+    } else {
+      window.location.href = "compra.html";
+    }
+  });
+});
+
+
+</script>
+
+<!-- =============================== -->
+<!-- 🔐 Aplicar login/logout no topo -->
+<!-- =============================== -->
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+  const token = localStorage.getItem("token");
+
+  if (!token) return;
+
+  try {
+    const r = await fetch("/api/me", { 
+      headers: { "Authorization": "Bearer " + token } 
+    });
+
+    if (!r.ok) return;
+
+    const user = await r.json();
+    applyUserToNavbar(user);
+
+    document.querySelector(".logout-btn")?.addEventListener("click", () => {
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      window.location.reload();
+    });
+
+  } catch (err) {
+    console.warn("Erro ao carregar usuário:", err);
+  }
+});
+</script>
+<script>
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const cartLink = document.querySelector(".cart-link");
+
+    if (!cartLink) return;
+
+    // pega carrinho salvo
+    let cart = localStorage.getItem("ticketup_cart");
+
+    if (!cart) {
+      cartLink.href = "compra.html"; 
+      return;
+    }
+
+    cart = JSON.parse(cart);
+
+    if (!cart.length) {
+      cartLink.href = "compra.html";
+      return;
+    }
+
+    // PEGA O EVENTO DO PRIMEIRO ITEM
+    const eventId = cart[0].event_id;
+
+    if (eventId) {
+      cartLink.href = `compra.html?id=${eventId}`;
+    } else {
+      cartLink.href = "compra.html";
+    }
+  });
+</script>
+<!-- =============================== -->
+<!-- 🔧 FIX: Redirecionamento Carrinho -->
+<!-- =============================== -->
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const cartLink = document.querySelector(".cart-link");
+  const cartCount = document.querySelector(".cart-count");
+
+  if (!cartLink) return;
+
+  // Ler carrinho salvo
+  let cartRaw = localStorage.getItem("ticketup_cart");
+
+  // Carrinho inexistente → compra.html
+  if (!cartRaw) {
+    cartLink.href = "compra.html";
+    if (cartCount) cartCount.textContent = "0";
+    return;
+  }
+
+  let cart = [];
+  try {
+    cart = JSON.parse(cartRaw);
+  } catch (err) {
+    console.warn("Erro ao decodificar carrinho:", err);
+  }
+
+  // Carrinho vazio → compra.html
+  if (!Array.isArray(cart) || cart.length === 0) {
+    cartLink.href = "compra.html";
+    if (cartCount) cartCount.textContent = "0";
+    return;
+  }
+
+  // Atualiza contador
+  if (cartCount) cartCount.textContent = cart.length.toString();
+
+  // Redirecionamento correto usando event_id
+  const eventId = cart[0].event_id ?? cart[0].eventId ?? null;
+
+  if (eventId) {
+    cartLink.href = `compra.html?id=${encodeURIComponent(eventId)}`;
+  } else {
+    cartLink.href = "compra.html";
+  }
+});
+</script>
+
+
+<!-- =============================== -->
+<!-- 🔧 Remover script inexistente -->
+<!-- =============================== -->
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  // Remove o script cart.js se não existir
+  const scripts = document.querySelectorAll("script[src='cart.js']");
+  scripts.forEach(s => {
+    console.warn("Removido script inexistente:", s.src);
+    s.remove();
+  });
+});
 </script>
 
 </body>

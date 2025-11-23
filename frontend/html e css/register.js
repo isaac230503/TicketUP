@@ -1,18 +1,27 @@
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("register-form");
 
+  if (!form) {
+    console.error("Erro: Formulário de registro não encontrado!");
+    return;
+  }
+
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
     const name = document.getElementById("name").value.trim();
     const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value.trim();
+const password2 = document.getElementById("password2").value.trim();
 
-    // IDs corrigidos conforme o register.html
-    const password = document.getElementById("senha").value.trim();
-    const password2 = document.getElementById("senha2").value.trim();
+
+    if (!name || !email || !password || !password2) {
+      alert("Preencha todos os campos!");
+      return;
+    }
 
     if (password !== password2) {
-      alert("As senhas não conferem!");
+      alert("As senhas não coincidem!");
       return;
     }
 
@@ -26,16 +35,20 @@ document.addEventListener("DOMContentLoaded", () => {
       const data = await res.json();
 
       if (!res.ok) {
-        alert(data.error || "Erro ao registrar");
+        alert(data.error || "Erro ao registrar.");
         return;
       }
 
-      alert("Registrado com sucesso!");
-      window.location.href = "login.html";
+      // Salvar token e usuário
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("user", JSON.stringify(data));
+
+      alert("Conta criada com sucesso!");
+      window.location.href = "index.html";
 
     } catch (err) {
-      console.error(err);
-      alert("Erro de conexão.");
+      console.error("Erro no registro:", err);
+      alert("Erro ao conectar ao servidor.");
     }
   });
 });

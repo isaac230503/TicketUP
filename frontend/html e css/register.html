@@ -17,8 +17,6 @@
 
     <h1 id="register-title">Crie sua conta</h1>
 
-    <!-- FORM CORRIGIDO -->
-    <!-- Removido action="register.html" para evitar erro POST /register.html -->
     <form id="register-form">
 
       <label class="field-label" for="name">Nome completo</label>
@@ -33,16 +31,16 @@
         <input id="email" name="email" type="email" placeholder="seu@email.com" required>
       </div>
 
-      <label class="field-label" for="senha">Senha</label>
+      <label class="field-label" for="password">Senha</label>
       <div class="input-box">
         <i class='bx bxs-lock-alt'></i>
-        <input id="senha" name="senha" type="password" placeholder="Crie uma senha" required>
+        <input id="password" name="password" type="password" placeholder="Crie uma senha" required>
       </div>
 
-      <label class="field-label" for="senha2">Confirmar senha</label>
+      <label class="field-label" for="password2">Confirmar senha</label>
       <div class="input-box">
         <i class='bx bxs-lock'></i>
-        <input id="senha2" name="senha2" type="password" placeholder="Repita a senha" required>
+        <input id="password2" name="password2" type="password" placeholder="Repita a senha" required>
       </div>
 
       <div class="extras">
@@ -54,9 +52,6 @@
       <p class="signup">Já tem conta? <a href="/login.html">Entrar</a></p>
     </form>
 
-    <!-- 🔥 Removido requireAuth() (não deve existir em página pública) -->
-
-    <!-- Script real de registro -->
     <script src="register.js"></script>
 
   </main>

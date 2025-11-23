@@ -9,11 +9,17 @@
   <link rel="stylesheet" href="ajuda.css">
 </head>
 <body>
+
+  <!-- 🔐 Proteção da página (deve ser o PRIMEIRO script) -->
+  <script src="auth_guard.js"></script>
+  <script>requireAuth();</script>
+
   <header class="topbar">
     <div class="topbar-inner container">
       <div class="logo"><a href="index.html"><img src="../assets/logo.png" alt="TicketUP"></a></div>
       <nav class="toplinks">
-        <a href="login.html">Entrar/Cadastrar</a>
+        <a href="carrinho.html">Meus Pedidos</a>
+        <a href="#" id="logout-btn">Sair</a>
         <span class="user-name" style="color:#fff;margin-left:12px"></span>
       </nav>
     </div>
@@ -25,8 +31,6 @@
         <h1>Como podemos te ajudar hoje?</h1>
 
         <form id="help-form">
-          <input name="name" placeholder="Seu nome" />
-          <input name="email" placeholder="Seu email" />
           <input name="subject" placeholder="Assunto" />
           <textarea name="message" placeholder="Descreva o problema"></textarea>
           <button type="submit">Enviar solicitação</button>
@@ -83,10 +87,9 @@
       <p>© 2025 TicketUP — Todos os direitos reservados</p>
     </div>
   </footer>
+<script src="ajuda.js"></script>
   <script src="auth.js"></script>
-<script>
-    requireAuth();
-</script>
-
+<script src="auth_ui.js"></script>
+<script src="auth-header.js"></script>
 </body>
 </html>
