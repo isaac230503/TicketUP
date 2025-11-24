@@ -26,8 +26,9 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(compression());
 
+const FRONTEND_ORIGIN = process.env.FRONTEND_ORIGIN || "http://localhost:3000";
 app.use(cors({
-  origin: "http://localhost:3000",
+  origin: FRONTEND_ORIGIN,
   methods: "GET,POST,PUT,DELETE",
   credentials: true
 }));
@@ -341,5 +342,6 @@ app.use((err, req, res, next) => {
 // ▶️ INICIAR SERVIDOR
 // ======================================================
 app.listen(PORT, () => {
-  console.log(`🚀 API rodando em http://localhost:${PORT}`);
+  console.log(`🚀 API rodando na porta ${PORT}`);
+  console.log(`🔗 Frontend origin: ${FRONTEND_ORIGIN}`);
 });
